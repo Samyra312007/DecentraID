@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0052ff;
+  --color-primary-active: #003ecc;
+  --color-primary-disabled: #a8b8cc;
+  --color-ink: #0a0b0d;
+  --color-body: #5b616e;
+  --color-body-strong: #0a0b0d;
+  --color-muted: #7c828a;
+  --color-muted-soft: #a8acb3;
+  --color-hairline: #dee1e6;
+  --color-hairline-soft: #eef0f3;
+  --color-canvas: #ffffff;
+  --color-surface-soft: #f7f7f7;
+  --color-surface-card: #ffffff;
+  --color-surface-strong: #eef0f3;
+  --color-surface-dark: #0a0b0d;
+  --color-surface-dark-elevated: #16181c;
+  --color-on-primary: #ffffff;
+  --color-on-dark: #ffffff;
+  --color-on-dark-soft: #a8acb3;
+  --color-semantic-up: #05b169;
+  --color-semantic-down: #cf202f;
+  --color-accent-yellow: #f4b000;
+}
+
+* {
+  border-color: var(--color-hairline);
+}
+
+body {
+  color: var(--color-body);
+  background: var(--color-canvas);
+  font-family: 'Inter', -apple-system, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Coinbase-style pill buttons */
+.btn-primary {
+  padding: 12px 20px;
+  height: 44px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  background-color: var(--color-primary);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-active);
+}
+.btn-primary:disabled {
+  background-color: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  padding: 12px 20px;
+  height: 44px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 14px;
+  background-color: var(--color-surface-strong);
+  color: var(--color-ink);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+.btn-secondary:hover {
+  background-color: var(--color-hairline);
+}
+
+/* Card styles */
+.card {
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid var(--color-hairline);
+  background-color: var(--color-surface-card);
+}
+
+/* Input styles */
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 14px;
+  border: 1px solid var(--color-hairline);
+  outline: none;
+  transition: all 0.2s;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+}
+.input:focus {
+  border-color: var(--color-primary);
+  border-width: 2px;
+  padding: 13px 15px;
+}
+
+/* Badge styles */
+.badge {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: var(--color-surface-strong);
+  color: var(--color-ink);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface-soft);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-hairline);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-soft);
+}

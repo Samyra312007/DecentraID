@@ -61,3 +61,12 @@ infra/nginx/ssl/*.crt
 # ========== OS ==========
 Thumbs.db
 .DS_Store
+
+# ======= Agent Skills ======
+.agents/skills
+.impeccable
+.codex
+DESIGN.md
+skills-lock.json
+
+planning.md
