@@ -1,5 +1,5 @@
 """
-Tests for blockchain service layer.
+Comprehensive tests for backend service layer.
 """
 
 import pytest
@@ -83,6 +83,13 @@ class TestSecurityModule:
 
         assert hash1 != hash2
 
+    def test_hash_document_empty(self):
+        """Empty content should produce a valid hash."""
+        from app.core.security import hash_document
+
+        result = hash_document(b"")
+        assert len(result) == 64
+
 
 class TestConstants:
     """Test suite for application constants."""
@@ -102,6 +109,17 @@ class TestConstants:
         assert ASSET_TYPE_CERTIFICATE == "certificate"
         assert ASSET_TYPE_LICENSE == "license"
         assert ASSET_TYPE_DEGREE == "degree"
+
+    def test_access_actions(self):
+        """Access actions should be defined."""
+        from app.core.constants import (
+            ACCESS_ACTION_READ,
+            ACCESS_ACTION_WRITE,
+            ACCESS_ACTION_DELETE,
+        )
+        assert ACCESS_ACTION_READ == "read"
+        assert ACCESS_ACTION_WRITE == "write"
+        assert ACCESS_ACTION_DELETE == "delete"
 
 
 class TestValidators:
@@ -137,6 +155,22 @@ class TestValidators:
         assert not validate_did_format("invalid-did")
         assert not validate_did_format("did:other:0x123")
 
+    def test_validate_asset_type(self):
+        """Asset type validation should work correctly."""
+        from app.utils.validators import validate_asset_type
+
+        assert validate_asset_type("certificate")
+        assert validate_asset_type("license")
+        assert not validate_asset_type("unknown_type")
+
+    def test_validate_action(self):
+        """Action validation should work correctly."""
+        from app.utils.validators import validate_action
+
+        assert validate_action("read")
+        assert validate_action("write")
+        assert not validate_action("execute")
+
 
 class TestDIDUtils:
     """Test suite for DID utility functions."""
@@ -158,3 +192,74 @@ class TestDIDUtils:
         did = f"did:decentraid:{address}"
 
         assert extract_address_from_did(did) == address
+
+    def test_extract_address_invalid(self):
+        """Extracting address from invalid DID should raise error."""
+        from app.utils.did_utils import extract_address_from_did
+
+        with pytest.raises(ValueError):
+            extract_address_from_did("invalid-did")
+
+
+class TestCryptoUtils:
+    """Test suite for crypto utility functions."""
+
+    def test_keccak256(self):
+        """Keccak256 should produce correct hash."""
+        from app.utils.crypto_utils import keccak256
+
+        result = keccak256("test")
+        assert len(result) == 32  # 32 bytes
+
+    def test_sha256(self):
+        """SHA-256 should produce correct hash."""
+        from app.utils.crypto_utils import sha256
+
+        result = sha256(b"test")
+        assert len(result) == 64  # 64 hex chars
+
+    def test_to_bytes32(self):
+        """to_bytes32 should produce 32-byte hash."""
+        from app.utils.crypto_utils import to_bytes32
+
+        result = to_bytes32("test")
+        assert len(result) == 32
+
+    def test_from_bytes32(self):
+        """from_bytes32 should convert to hex string."""
+        from app.utils.crypto_utils import from_bytes32
+
+        result = from_bytes32(b"\x00" * 32)
+        assert result == "00" * 32
+
+
+class TestExceptions:
+    """Test suite for custom exceptions."""
+
+    def test_did_not_found_exception(self):
+        """did_not_found should return HTTP 404."""
+        from app.core.exceptions import did_not_found
+
+        exc = did_not_found("test-did")
+        assert exc.status_code == 404
+
+    def test_did_already_exists_exception(self):
+        """did_already_exists should return HTTP 400."""
+        from app.core.exceptions import did_already_exists
+
+        exc = did_already_exists("test-did")
+        assert exc.status_code == 400
+
+    def test_unauthorized_exception(self):
+        """unauthorized should return HTTP 403."""
+        from app.core.exceptions import unauthorized
+
+        exc = unauthorized()
+        assert exc.status_code == 403
+
+    def test_bad_request_exception(self):
+        """bad_request should return HTTP 400."""
+        from app.core.exceptions import bad_request
+
+        exc = bad_request("test error")
+        assert exc.status_code == 400

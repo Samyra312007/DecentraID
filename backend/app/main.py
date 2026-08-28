@@ -29,11 +29,35 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title=f"{settings.app_name} API",
-    description="Blockchain-based Identity, Access Control & Asset Management",
+    description="""DecentraID — Blockchain-based Decentralized Identity Platform
+
+## Features
+- **DID Management**: Create, resolve, and update decentralized identities on Polygon
+- **NFT Assets**: Mint, transfer, and verify digital assets as ERC-721 NFTs
+- **Access Control**: Role-based and attribute-based access control via smart contracts
+- **IPFS Storage**: Decentralized document storage with content verification
+- **Anomaly Detection**: AI/ML-powered security monitoring
+
+## Authentication
+All protected endpoints require a JWT Bearer token obtained via `/api/v1/auth/login`.
+
+## Blockchain
+All identity and asset operations are recorded on the Polygon Amoy testnet.
+""",
     version=settings.app_version,
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
+    openapi_tags=[
+        {"name": "Authentication", "description": "Wallet signature based login"},
+        {"name": "DID", "description": "Decentralized Identity management"},
+        {"name": "Assets", "description": "NFT asset minting and management"},
+        {"name": "Access Control", "description": "Role-based access control"},
+        {"name": "Policies", "description": "Access policy management"},
+        {"name": "Anomaly Detection", "description": "Security anomaly monitoring"},
+        {"name": "IPFS", "description": "Decentralized document storage"},
+        {"name": "WebSocket", "description": "Real-time event notifications"},
+    ],
 )
 
 # ========== Middleware ==========
