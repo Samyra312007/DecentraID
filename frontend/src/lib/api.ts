@@ -155,6 +155,14 @@ class ApiClient {
     return this.request(`/api/v1/anomaly/alerts?${params.toString()}`);
   }
 
+  // Anomaly Profile
+  async getAnomalyProfile(userId?: string) {
+    const endpoint = userId
+      ? `/api/v1/anomaly/profile/${userId}`
+      : `/api/v1/anomaly/profile`;
+    return this.request(endpoint);
+  }
+
   async acknowledgeAlert(alertId: string) {
     return this.request(`/api/v1/anomaly/alerts/${alertId}/acknowledge`, {
       method: 'POST',

@@ -90,10 +90,7 @@ export function useAnomaly() {
     setError(null);
 
     try {
-      const endpoint = userId
-        ? `/api/v1/anomaly/profile/${userId}`
-        : '/api/v1/anomaly/profile';
-      const data: any = await api.request(endpoint);
+      const data: any = await api.getAnomalyProfile(userId);
       setProfile({
         user_id: data.user_id,
         total_events: data.total_events || 0,
