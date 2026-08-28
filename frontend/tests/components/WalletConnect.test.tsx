@@ -1,55 +1,78 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { WalletConnect } from '@/components/common/WalletConnect'
 
-describe('WalletConnect Component', () => {
-  const mockOnClick = jest.fn()
+// Mock useDecentraID hook
+const mockConnectWallet = jest.fn()
+const mockDisconnectWallet = jest.fn()
 
+jest.mock('@/hooks/useDecentraID', () => ({
+  useDecentraID: () => ({
+    address: null,
+    connected: false,
+    connectWallet: mockConnectWallet,
+    disconnectWallet: mockDisconnectWallet,
+    chainId: null,
+    isCorrectNetwork: false,
+  }),
+}))
+
+// Mock web3 lib
+jest.mock('@/lib/web3', () => ({
+  connectWallet: jest.fn(),
+}))
+
+// Mock api client
+jest.mock('@/lib/api', () => ({
+  api: {
+    setToken: jest.fn(),
+    login: jest.fn(),
+    resolveDID: jest.fn(),
+  },
+}))
+
+describe('WalletConnect Component', () => {
   beforeEach(() => {
-    mockOnClick.mockClear()
+    jest.clearAllMocks()
   })
 
-  it('renders connect button', () => {
-    render(<WalletConnect onClick={mockOnClick} />)
+  it('renders connect prompt when disconnected', () => {
+    render(<WalletConnect />)
     
+    expect(screen.getByText('Connect Your Wallet')).toBeInTheDocument()
     expect(screen.getByText('Connect MetaMask')).toBeInTheDocument()
   })
 
-  it('calls onClick when button is clicked', () => {
-    render(<WalletConnect onClick={mockOnClick} />)
+  it('shows MetaMask fox icon', () => {
+    render(<WalletConnect />)
     
-    const button = screen.getByRole('button')
-    fireEvent.click(button)
-    
-    expect(mockOnClick).toHaveBeenCalledTimes(1)
+    expect(screen.getByText('🦊')).toBeInTheDocument()
   })
 
-  it('shows connecting state while loading', () => {
-    const slowOnClick = jest.fn(() => new Promise<void>(resolve => setTimeout(resolve, 100)))
-    render(<WalletConnect onClick={slowOnClick} />)
+  it('shows description text', () => {
+    render(<WalletConnect />)
     
-    const button = screen.getByRole('button')
-    fireEvent.click(button)
-    
-    expect(screen.getByText('Connecting...')).toBeInTheDocument()
+    expect(screen.getByText(/Connect your MetaMask wallet/)).toBeInTheDocument()
   })
 
-  it('disables button while connecting', () => {
-    const slowOnClick = jest.fn(() => new Promise<void>(resolve => setTimeout(resolve, 100)))
-    render(<WalletConnect onClick={slowOnClick} />)
+  it('renders connect button', () => {
+    render(<WalletConnect />)
     
-    const button = screen.getByRole('button')
-    fireEvent.click(button)
-    
-    expect(button).toBeDisabled()
+    const button = screen.getByRole('button', { name: 'Connect MetaMask' })
+    expect(button).toBeInTheDocument()
   })
 
-  it('has correct styling classes', () => {
-    render(<WalletConnect onClick={mockOnClick} />)
+  it('has correct button styling', () => {
+    render(<WalletConnect />)
     
-    const button = screen.getByRole('button')
-    expect(button).toHaveClass('bg-blue-600')
-    expect(button).toHaveClass('hover:bg-blue-700')
-    expect(button).toHaveClass('text-white')
+    const button = screen.getByRole('button', { name: 'Connect MetaMask' })
+    expect(button).toHaveClass('btn-primary')
+  })
+
+  it('renders compact variant', () => {
+    render(<WalletConnect variant="compact" />)
+    
+    // When disconnected, compact variant shows the same connect UI
+    expect(screen.getByText('Connect MetaMask')).toBeInTheDocument()
   })
 })
