@@ -76,7 +76,7 @@ def train_models(
     )
     
     print(f"   Training complete!")
-    print(f"   - Autoencoder final loss: {training_result['autoencoder_history']['loss'][-1]:.4f}")
+    print(f"   - Autoencoder final loss: {training_result.get('autoencoder_history', {}).get('loss', [0])[-1] if isinstance(training_result.get('autoencoder_history'), dict) else training_result.get('autoencoder_final_loss', 0):.4f}")
     print(f"   - Ensemble threshold: {training_result['ensemble_threshold']:.4f}")
     
     # Evaluate on mixed data
