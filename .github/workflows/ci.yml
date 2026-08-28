@@ -1,8 +1,6 @@
 # =============================================================================
 # DecentraID CI Pipeline
 # =============================================================================
-# Runs on every push and pull request to main branch.
-# =============================================================================
 
 name: CI
 
@@ -181,12 +179,12 @@ jobs:
           flags: anomaly-detection
 
   # ===========================================================================
-  # Docker Build
+  # Docker Build -- parallel, fast, only validates Dockerfiles build
   # ===========================================================================
-  docker:
-    name: Docker Build
+  docker-backend:
+    name: Docker Build - Backend
     runs-on: ubuntu-latest
-    needs: [contracts, backend, frontend, anomaly-detection]
+    needs: [backend]
     
     steps:
       - name: Checkout code
@@ -195,29 +193,53 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Build backend
+      - name: Build backend image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
           push: false
           tags: decentraid/backend:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=docker-backend
+          cache-to: type=gha,mode=max,scope=docker-backend
+
+  docker-anomaly:
+    name: Docker Build - Anomaly Detection
+    runs-on: ubuntu-latest
+    needs: [anomaly-detection]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       
-      - name: Build frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: ./frontend
-          push: false
-          tags: decentraid/frontend:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       
-      - name: Build anomaly-detection
+      - name: Build anomaly-detection image
         uses: docker/build-push-action@v5
         with:
           context: ./anomaly-detection
           push: false
           tags: decentraid/anomaly-detection:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=docker-anomaly
+          cache-to: type=gha,mode=max,scope=docker-anomaly
+
+  docker-frontend:
+    name: Docker Build - Frontend
+    runs-on: ubuntu-latest
+    needs: [frontend]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: false
+          tags: decentraid/frontend:latest
+          cache-from: type=gha,scope=docker-frontend
+          cache-to: type=gha,mode=max,scope=docker-frontend
