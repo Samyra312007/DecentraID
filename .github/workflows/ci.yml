@@ -42,10 +42,6 @@ jobs:
       - name: Run tests
         working-directory: contracts
         run: npx hardhat test
-      
-      - name: Run gas report
-        working-directory: contracts
-        run: npx hardhat test --gas-report || true
 
   # ===========================================================================
   # Backend Tests
@@ -85,6 +81,13 @@ jobs:
           cache: 'pip'
           cache-dependency-path: backend/requirements.txt
       
+      - name: Create dummy deployment files
+        run: |
+          mkdir -p contracts/deployments/amoy
+          echo '{"address":"0x0000000000000000000000000000000000000000","abi":[]}' > contracts/deployments/amoy/DecentraIDIdentity.json
+          echo '{"address":"0x0000000000000000000000000000000000000000","abi":[]}' > contracts/deployments/amoy/DecentraIDAccessControl.json
+          echo '{"address":"0x0000000000000000000000000000000000000000","abi":[]}' > contracts/deployments/amoy/DecentraIDAssets.json
+      
       - name: Install dependencies
         working-directory: backend
         run: |
@@ -93,14 +96,16 @@ jobs:
       
       - name: Run tests
         working-directory: backend
-        run: pytest -v --cov=app --cov-report=xml
+        run: pytest -v --tb=short --cov=app --cov-report=xml
         env:
-          DATABASE_URL: postgresql://user:password@localhost:5432/decentraid_test
+          DATABASE_URL: postgresql+asyncpg://user:password@localhost:5432/decentraid_test
           REDIS_URL: redis://localhost:6379
           JWT_SECRET: test-secret-key
           ENCRYPTION_KEY: test-encryption-key
+          POLYGON_AMOY_RPC_URL: https://rpc-amoy.polygon.technology
       
       - name: Upload coverage
+        if: always()
         uses: codecov/codecov-action@v3
         with:
           file: backend/coverage.xml
@@ -166,9 +171,10 @@ jobs:
       
       - name: Run tests
         working-directory: anomaly-detection
-        run: pytest tests/ -v --cov=app --cov-report=xml
+        run: pytest tests/ -v --tb=short --cov=app --cov-report=xml
       
       - name: Upload coverage
+        if: always()
         uses: codecov/codecov-action@v3
         with:
           file: anomaly-detection/coverage.xml
