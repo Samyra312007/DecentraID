@@ -1,0 +1,63 @@
+# ========== ROOT ==========
+.env
+.env.local
+.env.production
+*.log
+.DS_Store
+
+# ========== CONTRACTS ==========
+contracts/node_modules/
+contracts/cache/
+contracts/artifacts/
+contracts/typechain-types/
+contracts/.env
+contractscoverage/
+contracts/coverage/
+
+# ========== BACKEND ==========
+backend/__pycache__/
+backend/**/*.pyc
+backend/.env
+backend/venv/
+backend/.venv/
+backend/alembic/versions/*.pyc
+backend/.pytest_cache/
+backend/htmlcov/
+backend/.coverage
+
+# ========== FRONTEND ==========
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+frontend/.env
+frontend/coverage/
+
+# ========== ANOMALY DETECTION ==========
+anomaly-detection/node_modules/
+anomaly-detection/__pycache__/
+anomaly-detection/**/*.pyc
+anomaly-detection/venv/
+anomaly-detection/.venv/
+anomaly-detection/models/*.keras
+anomaly-detection/models/*.pkl
+anomaly-detection/.pytest_cache/
+
+# ========== DOCKER ==========
+docker-compose.override.yml
+
+# ========== INFRA ==========
+infra/nginx/ssl/*.pem
+infra/nginx/ssl/*.key
+infra/nginx/ssl/*.crt
+
+# ========== IDE ==========
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ========== OS ==========
+Thumbs.db
+.DS_Store

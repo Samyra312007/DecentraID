@@ -1,0 +1,23 @@
+{
+  "name": "decentraid-contracts",
+  "version": "1.0.0",
+  "description": "DecentraID Smart Contracts - Decentralized Identity, Access Control & NFT Assets",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "coverage": "npx hardhat coverage",
+    "deploy:local": "npx hardhat run scripts/deploy-all.js",
+    "deploy:amoy": "npx hardhat run scripts/deploy-all.js --network amoy",
+    "verify": "npx hardhat run scripts/verify.js --network amoy",
+    "clean": "npx hardhat clean"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.20.0",
+    "dotenv": "^16.3.1",
+    "chai": "^4.3.10"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0"
+  }
+}
