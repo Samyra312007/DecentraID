@@ -1,16 +1,15 @@
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import '@/styles/globals.css';
-import { Sidebar } from '@/components/layout/Sidebar';
-import { Header } from '@/components/layout/Header';
+import { LayoutShell } from '@/components/layout/LayoutShell';
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-inter',
 });
 
-const jetbrainsMono = JetBrains_Mono({ 
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   weight: ['400', '500'],
   variable: '--font-mono',
@@ -28,16 +27,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans antialiased">
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <div className="flex-1 ml-64">
-            <Header />
-            <main className="p-8">
-              {children}
-            </main>
-          </div>
-        </div>
+      <body className="font-sans antialiased" style={{ background: 'var(--color-bg-deep)' }}>
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   );

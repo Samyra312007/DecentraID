@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { DIDCard } from '@/components/did/DIDCard';
 import { DIDCreateForm } from '@/components/did/DIDCreateForm';
 import { DIDDetail } from '@/components/did/DIDDetail';
@@ -8,7 +9,6 @@ import { WalletConnect } from '@/components/common/WalletConnect';
 import { useDecentraID } from '@/hooks/useDecentraID';
 import type { DIDDocument } from '@/types/did';
 
-// Mock data for demonstration
 const mockDIDs: DIDDocument[] = [
   {
     id: '1',
@@ -17,9 +17,7 @@ const mockDIDs: DIDDocument[] = [
     controller: '0x1234567890abcdef1234567890abcdef12345678',
     status: 'active',
     verification_methods: ['0x1234567890abcdef1234567890abcdef12345678'],
-    services: [
-      { id: '#service-1', type: 'DIDCommMessaging', serviceEndpoint: 'https://example.com/messaging' }
-    ],
+    services: [{ id: '#service-1', type: 'DIDCommMessaging', serviceEndpoint: 'https://example.com/messaging' }],
     created_at: '2024-01-15T10:30:00Z',
     updated_at: '2024-01-20T14:22:00Z',
   },
@@ -44,13 +42,11 @@ export default function DIDPage() {
   if (!connected) {
     return (
       <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-semibold" style={{ color: 'var(--color-ink)' }}>Decentralized Identifiers</h1>
-          <p className="mt-1" style={{ color: 'var(--color-muted)' }}>Manage your DIDs on Polygon blockchain</p>
-        </div>
-        <div className="max-w-md">
-          <WalletConnect />
-        </div>
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+          <h1 className="text-3xl font-bold text-white">Decentralized Identifiers</h1>
+          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Manage your DIDs on Polygon blockchain</p>
+        </motion.div>
+        <div className="max-w-md"><WalletConnect /></div>
       </div>
     );
   }
@@ -58,16 +54,11 @@ export default function DIDPage() {
   if (view === 'create') {
     return (
       <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-semibold" style={{ color: 'var(--color-ink)' }}>Create New DID</h1>
-          <p className="mt-1" style={{ color: 'var(--color-muted)' }}>Set up a new decentralized identity</p>
-        </div>
-        <div className="max-w-2xl">
-          <DIDCreateForm 
-            onSuccess={() => setView('list')} 
-            onCancel={() => setView('list')} 
-          />
-        </div>
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+          <h1 className="text-3xl font-bold text-white">Create New DID</h1>
+          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Set up a new decentralized identity</p>
+        </motion.div>
+        <div className="max-w-2xl"><DIDCreateForm onSuccess={() => setView('list')} onCancel={() => setView('list')} /></div>
       </div>
     );
   }
@@ -75,44 +66,26 @@ export default function DIDPage() {
   if (view === 'detail' && selectedDID) {
     return (
       <div className="space-y-8">
-        <DIDDetail 
-          did={selectedDID} 
-          onBack={() => {
-            setView('list');
-            setSelectedDID(null);
-          }} 
-        />
+        <DIDDetail did={selectedDID} onBack={() => { setView('list'); setSelectedDID(null); }} />
       </div>
     );
   }
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold" style={{ color: 'var(--color-ink)' }}>Decentralized Identifiers</h1>
-          <p className="mt-1" style={{ color: 'var(--color-muted)' }}>Manage your DIDs on Polygon blockchain</p>
+          <h1 className="text-3xl font-bold text-white">Decentralized Identifiers</h1>
+          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Manage your DIDs on Polygon blockchain</p>
         </div>
-        <button 
-          onClick={() => setView('create')}
-          className="btn-primary"
-        >
-          + Create DID
-        </button>
-      </div>
+        <button onClick={() => setView('create')} className="btn-primary"><span>+ Create DID</span></button>
+      </motion.div>
 
-      {/* DID Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockDIDs.map((did) => (
-          <DIDCard 
-            key={did.id} 
-            did={did} 
-            onSelect={(d) => {
-              setSelectedDID(d);
-              setView('detail');
-            }}
-          />
+        {mockDIDs.map((did, i) => (
+          <motion.div key={did.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
+            <DIDCard did={did} onSelect={(d) => { setSelectedDID(d); setView('detail'); }} />
+          </motion.div>
         ))}
       </div>
     </div>

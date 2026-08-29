@@ -1,35 +1,14 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { AnomalyDetail } from '@/components/anomaly/AnomalyDetail';
 import { WalletConnect } from '@/components/common/WalletConnect';
 import { useDecentraID } from '@/hooks/useDecentraID';
 
-// Mock data for demonstration
 const mockAlerts = [
-  {
-    id: '1',
-    type: 'Unusual Access Pattern',
-    severity: 'high' as const,
-    message: 'Multiple failed access attempts detected from different locations',
-    timestamp: '2024-01-20T14:22:00Z',
-    acknowledged: false,
-  },
-  {
-    id: '2',
-    type: 'Rate Limit Exceeded',
-    severity: 'medium' as const,
-    message: 'API rate limit exceeded for identity resolution',
-    timestamp: '2024-01-20T10:15:00Z',
-    acknowledged: false,
-  },
-  {
-    id: '3',
-    type: 'New Device Detected',
-    severity: 'low' as const,
-    message: 'Access from new device in San Francisco, CA',
-    timestamp: '2024-01-19T08:30:00Z',
-    acknowledged: true,
-  },
+  { id: '1', type: 'Unusual Access Pattern', severity: 'high' as const, message: 'Multiple failed access attempts detected from different locations', timestamp: '2024-01-20T14:22:00Z', acknowledged: false },
+  { id: '2', type: 'Rate Limit Exceeded', severity: 'medium' as const, message: 'API rate limit exceeded for identity resolution', timestamp: '2024-01-20T10:15:00Z', acknowledged: false },
+  { id: '3', type: 'New Device Detected', severity: 'low' as const, message: 'Access from new device in San Francisco, CA', timestamp: '2024-01-19T08:30:00Z', acknowledged: true },
 ];
 
 const mockBehaviorData = [
@@ -47,26 +26,22 @@ export default function AnomalyPage() {
   if (!connected) {
     return (
       <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-semibold" style={{ color: 'var(--color-ink)' }}>Anomaly Detection</h1>
-          <p className="mt-1" style={{ color: 'var(--color-muted)' }}>Monitor and analyze suspicious activity</p>
-        </div>
-        <div className="max-w-md">
-          <WalletConnect />
-        </div>
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+          <h1 className="text-3xl font-bold text-white">Anomaly Detection</h1>
+          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Monitor and analyze suspicious activity</p>
+        </motion.div>
+        <div className="max-w-md"><WalletConnect /></div>
       </div>
     );
   }
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-semibold" style={{ color: 'var(--color-ink)' }}>Anomaly Detection</h1>
-        <p className="mt-1" style={{ color: 'var(--color-muted)' }}>Monitor and analyze suspicious activity</p>
-      </div>
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+        <h1 className="text-3xl font-bold text-white">Anomaly Detection</h1>
+        <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Monitor and analyze suspicious activity</p>
+      </motion.div>
 
-      {/* Anomaly Dashboard */}
       <AnomalyDetail
         score={23}
         alerts={mockAlerts}
