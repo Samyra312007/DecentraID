@@ -1,0 +1,39 @@
+# DecentraID CODEOWNERS
+# These owners will be automatically requested for review
+# when a pull request modifies files matching the patterns below.
+
+# Default owners for everything
+* @DecentraID/maintainers
+
+# Smart Contracts
+/contracts/ @DecentraID/smart-contracts
+/contracts/contracts/ @DecentraID/smart-contracts
+/contracts/test/ @DecentraID/smart-contracts
+
+# Backend API
+/backend/ @DecentraID/backend
+/backend/app/ @DecentraID/backend
+/backend/tests/ @DecentraID/backend
+
+# Frontend
+/frontend/ @DecentraID/frontend
+/frontend/src/ @DecentraID/frontend
+
+# Anomaly Detection / ML
+/anomaly-detection/ @DecentraID/ml
+/anomaly-detection/app/ @DecentraID/ml
+
+# Infrastructure & DevOps
+/infra/ @DecentraID/devops
+/docker-compose.yml @DecentraID/devops
+/.github/ @DecentraID/devops
+/setup.sh @DecentraID/devops
+
+# Documentation
+/docs/ @DecentraID/maintainers
+*.md @DecentraID/maintainers
+
+# Security-sensitive files
+/backend/app/core/security.py @DecentraID/maintainers @DecentraID/security
+/backend/app/middleware/security.py @DecentraID/maintainers @DecentraID/security
+/SECURITY.md @DecentraID/maintainers @DecentraID/security

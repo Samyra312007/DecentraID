@@ -28,7 +28,6 @@
 - [Security](#security)
 - [Deployment](#deployment)
 - [Cost Breakdown](#cost-breakdown)
-- [Roadmap](#roadmap)
 - [References](#references)
 - [License](#license)
 
@@ -114,21 +113,21 @@ DecentraID is a blockchain-based platform where users own their identity (DID), 
 ```
 +-----------------------------------------------------------+
 |                  Presentation Layer                        |
-|          Next.js 14  |  React 18  |  Tailwind CSS         |
+|          Next.js 14  |  React 18  |  Tailwind CSS          |
 +-----------------------------------------------------------+
 |                     API Gateway                            |
 |              Python FastAPI  |  JWT Auth  |  WebSocket     |
 +-----------------------------------------------------------+
 |                  Smart Contract Layer                      |
-|   Identity  |  Access Control (RBAC/ABAC)  |  NFT Assets  |
+|   Identity  |  Access Control (RBAC/ABAC)  |  NFT Assets   |
 |              Solidity 0.8.28  |  OpenZeppelin 5.x          |
 +-----------------------------------------------------------+
 |                    Blockchain Layer                        |
-|           Polygon L2 (Amoy Testnet)                       |
-|           65,000 TPS  |  < Rs 1 per transaction           |
+|           Polygon L2 (Amoy Testnet)                        |
+|           65,000 TPS  |  < Rs 1 per transaction            |
 +-----------------------------------------------------------+
 |                    AI/ML Layer                             |
-|       Anomaly Detection  |  Behavioral Profiling          |
+|       Anomaly Detection  |  Behavioral Profiling           |
 |              TensorFlow  |  scikit-learn                   |
 +-----------------------------------------------------------+
 |                      Data Layer                            |
@@ -822,18 +821,6 @@ docker compose down                 # Stop all services
 cd contracts
 npx hardhat run scripts/deploy-all.js --network amoy
 ```
-
-### Production Checklist
-
-- [ ] Deploy contracts to Polygon mainnet
-- [ ] Run Slither static analysis on all contracts
-- [ ] Complete formal code review
-- [ ] Set up monitoring (Prometheus + Grafana)
-- [ ] Configure SSL/TLS certificates
-- [ ] Set up automated backups
-- [ ] Complete load testing
-- [ ] Security audit
-
 ---
 
 ## Cost Breakdown
@@ -862,39 +849,6 @@ npx hardhat run scripts/deploy-all.js --network amoy
 
 ---
 
-## Roadmap
-
-### Phase 1 -- Current (Prototype)
-
-- [x] Core platform on Polygon testnet
-- [x] DID + Access Control + NFT basics
-- [x] AI anomaly detection model (ensemble)
-- [x] 106 smart contract tests passing
-- [x] 46 backend tests passing
-- [x] 28 frontend tests passing
-- [x] Docker Compose deployment
-- [x] GitHub Actions CI pipeline
-- [x] Prometheus + Grafana monitoring
-
-### Phase 2 -- 6 Months (Production)
-
-- [ ] Mainnet deployment on Polygon
-- [ ] Enterprise SSO/LDAP integration
-- [ ] Mobile application (iOS/Android)
-- [ ] Compliance certifications (ISO 27001, SOC 2)
-- [ ] Formal smart contract audit
-- [ ] Multi-chain support (Ethereum, BSC)
-
-### Phase 3 -- 12 Months (Scale)
-
-- [ ] Government adoption with Aadhaar integration option
-- [ ] Cross-border identity verification
-- [ ] Enterprise marketplace for DID applications
-- [ ] Hardware wallet support
-- [ ] Social recovery mechanism
-
----
-
 ## References
 
 | Resource | Link |
@@ -916,5 +870,3 @@ npx hardhat run scripts/deploy-all.js --network amoy
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
-
-**Built for SIH 2026 | Problem Statement SIH26125 | Bharat Electronics Limited**

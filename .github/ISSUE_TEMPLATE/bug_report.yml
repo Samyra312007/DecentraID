@@ -1,0 +1,123 @@
+name: Bug Report
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug! Please fill out the information below to help us investigate and fix the issue.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of DecentraID is affected?
+      options:
+        - Smart Contracts
+        - Backend API
+        - Frontend
+        - Anomaly Detection
+        - Infrastructure / Docker
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen.
+      placeholder: Describe expected behavior...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened.
+      placeholder: Describe actual behavior...
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain the problem.
+      placeholder: Paste screenshots here...
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Error Messages
+      description: Paste any relevant logs or error messages.
+      render: shell
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of DecentraID are you using?
+      placeholder: "e.g., v0.5.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: network
+    attributes:
+      label: Network
+      description: Which blockchain network?
+      options:
+        - Localhost (Hardhat)
+        - Ethereum Sepolia Testnet
+        - Polygon Mumbai Testnet
+        - Mainnet
+        - N/A
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Your development environment details.
+      placeholder: |
+        - OS: Ubuntu 22.04
+        - Node.js: v18.17.0
+        - Python: 3.11.4
+        - Docker: 24.0.5
+        - Browser: Chrome 115
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem.
+      placeholder: Additional information...

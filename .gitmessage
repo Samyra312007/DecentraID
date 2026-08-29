@@ -1,0 +1,47 @@
+# Commit Message Template
+# 
+# Use Conventional Commits format:
+# <type>(<scope>): <description>
+#
+# Types:
+#   feat     - A new feature
+#   fix      - A bug fix
+#   docs     - Documentation only changes
+#   style    - Code style changes (formatting, missing semi-colons, etc)
+#   refactor - Code change that neither fixes a bug nor adds a feature
+#   test     - Adding or correcting tests
+#   chore    - Build process or auxiliary tool changes
+#   ci       - CI/CD configuration changes
+#   perf     - Performance improvement
+#   revert   - Revert a previous commit
+#
+# Scopes:
+#   contracts  - Smart contracts (Solidity)
+#   backend    - Backend API (Python/FastAPI)
+#   frontend   - Frontend (Next.js/TypeScript)
+#   anomaly    - Anomaly detection (Python/ML)
+#   infra      - Infrastructure (Docker, Nginx, CI)
+#   docs       - Documentation
+#
+# Examples:
+#   feat(backend): add DID document rotation endpoint
+#   fix(frontend): resolve wallet connection timeout
+#   docs(api): update endpoint documentation
+#   test(contracts): add access control test cases
+#   chore(deps): update Python dependencies
+#
+# Footer:
+#   Closes #123
+#   Fixes #456
+
+# --- Commit Message ---
+# 
+# 
+# 
+# --- Testing ---
+#
+# 
+#
+# --- Notes ---
+#
+# 
