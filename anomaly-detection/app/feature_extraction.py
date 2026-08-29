@@ -109,7 +109,6 @@ class FeatureExtractor:
         if len(user_events) > 1:
             last_event_time = user_events[-2].get('_timestamp', timestamp)
             time_diff = (timestamp - last_event_time).total_seconds() / 60.0
-<<<<<<< HEAD
             time_since_last = np.log1p(max(time_diff, 0)) / 10.0  # Log-normalize
         else:
             time_since_last = 1.0  # Max value for first event
