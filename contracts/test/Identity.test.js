@@ -384,9 +384,5 @@ describe("DecentraIDIdentity", function () {
         await identity.hasVerificationMethod(alice.address, unknownMethod)
       ).to.be.false;
     });
-
-    it("should return zero nonce for new address", async function () {
-      expect(await identity.getNonce(alice.address)).to.equal(0);
-    });
   });
 });

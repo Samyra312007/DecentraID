@@ -326,7 +326,6 @@ contract DecentraIDAccessControl is IDecentraAccess, AccessControl, ReentrancyGu
         grant.revoked = true;
         emit AccessRevoked(_grantId, block.timestamp);
     }
-    }
 
     /**
      * @dev Internal function to find a matching policy
