@@ -94,7 +94,7 @@ class FeatureExtractor:
         # Combine all features
         features = np.array(temporal + frequency + geographic + behavioral, dtype=np.float32)
         
-        return features
+        return np.nan_to_num(features, nan=0.0, posinf=1.0, neginf=0.0)
     
     def _extract_temporal_features(
         self, event: Dict, timestamp: datetime
@@ -109,7 +109,8 @@ class FeatureExtractor:
         if len(user_events) > 1:
             last_event_time = user_events[-2].get('_timestamp', timestamp)
             time_diff = (timestamp - last_event_time).total_seconds() / 60.0
-            time_since_last = np.log1p(time_diff) / 10.0  # Log-normalize
+<<<<<<< HEAD
+            time_since_last = np.log1p(max(time_diff, 0)) / 10.0  # Log-normalize
         else:
             time_since_last = 1.0  # Max value for first event
         
