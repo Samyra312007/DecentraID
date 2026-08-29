@@ -46,6 +46,9 @@ services:
       POLYGON_AMOY_RPC_URL: ${POLYGON_AMOY_RPC_URL:-https://rpc-amoy.polygon.technology}
       IPFS_API_URL: ${IPFS_API_URL:-/ip4/127.0.0.1/tcp/5001}
       ANOMALY_SERVICE_URL: http://anomaly-detection:8001
+      DEBUG: "true"
+      JWT_SECRET: ${JWT_SECRET:-dev-only-jwt-secret-not-for-production}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-dev-only-encryption-key-not-for-production}
     ports:
       - "8000:8000"
     depends_on:
