@@ -59,7 +59,7 @@ export default function SettingsPage() {
                     <p className="text-sm font-medium text-white">{item.label}</p>
                     <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{item.description}</p>
                   </div>
-                  <button className="w-12 h-6 rounded-full p-1 transition-colors" style={{ background: 'var(--color-bg-glass)' }}>
+                  <button className="w-12 h-6 rounded-full p-1 transition-colors" style={{ background: 'var(--color-surface-hover)' }}>
                     <div className="w-4 h-4 rounded-full bg-white/40 shadow-sm transform transition-transform" />
                   </button>
                 </div>
@@ -88,7 +88,7 @@ export default function SettingsPage() {
                 { label: 'View Assets', href: '/assets' },
                 { label: 'Anomaly Dashboard', href: '/anomaly' },
               ].map((link) => (
-                <a key={link.href} href={link.href} className="block text-sm py-1 transition-colors" style={{ color: 'var(--color-text-accent)' }}>
+                <a key={link.href} href={link.href} className="block text-sm py-1 transition-colors" style={{ color: 'var(--color-primary)' }}>
                   {link.label}
                 </a>
               ))}

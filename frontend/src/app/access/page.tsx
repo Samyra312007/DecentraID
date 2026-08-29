@@ -39,15 +39,15 @@ export default function AccessPage() {
       </motion.div>
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'var(--color-bg-glass)', border: '1px solid var(--color-border)' }}>
+      <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'var(--color-surface-hover)', border: '1px solid var(--color-border)' }}>
         {(['requests', 'policies', 'roles'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className="px-5 py-2.5 text-sm font-medium rounded-lg transition-all"
             style={{
-              background: activeTab === tab ? 'rgba(99, 102, 241, 0.2)' : 'transparent',
-              color: activeTab === tab ? '#818cf8' : 'var(--color-text-muted)',
+              background: activeTab === tab ? 'rgba(13, 148, 136, 0.2)' : 'transparent',
+              color: activeTab === tab ? '#5eead4' : 'var(--color-text-muted)',
             }}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}

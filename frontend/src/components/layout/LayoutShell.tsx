@@ -13,7 +13,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen" style={{ background: 'var(--color-bg)' }}>
       <Sidebar />
       <div className="flex-1 ml-64">
         <Header />
