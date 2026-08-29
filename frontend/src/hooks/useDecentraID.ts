@@ -82,8 +82,8 @@ export function useDecentraID() {
       api.setToken(useToken);
       const response: any = await api.listAssets();
       setAssets(response.assets || []);
-    } catch (err) {
-      console.error('Failed to fetch assets:', err);
+    } catch {
+      // Silently fail — assets will be empty
     }
   }, [token]);
 
@@ -95,8 +95,8 @@ export function useDecentraID() {
       api.setToken(useToken);
       const response: any = await api.getAnomalyAlerts();
       setAlerts(response.alerts || []);
-    } catch (err) {
-      console.error('Failed to fetch alerts:', err);
+    } catch {
+      // Silently fail — alerts will be empty
     }
   }, [token]);
 
@@ -135,7 +135,7 @@ export function useDecentraID() {
     return api.requestAccess(resourceId, action, reason);
   }, [token]);
 
-  // WebSocket for real-time events
+  // WebSocket for real-time events (authenticated)
   useEffect(() => {
     if (!token) return;
 
@@ -144,8 +144,18 @@ export function useDecentraID() {
 
     const ws = new WebSocket(wsUrl);
 
+    ws.onopen = () => {
+      // Send authentication token as the first message
+      ws.send(JSON.stringify({ token }));
+    };
+
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
+
+      // Ignore auth handshake responses
+      if (data.type === 'authenticated' || data.type === 'connected' || data.type === 'error') {
+        return;
+      }
 
       if (data.type === 'anomaly_alert') {
         setAlerts((prev) => [data.data, ...prev]);
@@ -156,8 +166,8 @@ export function useDecentraID() {
       }
     };
 
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
+    ws.onerror = () => {
+      // Reconnect logic could be added here
     };
 
     return () => ws.close();

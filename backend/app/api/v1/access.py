@@ -61,8 +61,16 @@ async def check_access(
     did: str = Query(...),
     resource_id: str = Query(...),
     action: str = Query(...),
+    current_user: dict = Depends(get_current_user),
 ):
-    """Check if a DID has access to a resource."""
+    """Check if a DID has access to a resource.\n\n    Only the DID controller or an admin can check access for a DID.
+    """
+    # Enforce: you can only check your own access (or be admin)
+    if current_user["did"] != did:
+        from app.services.blockchain.access_service import AccessService
+        access_svc = AccessService()
+        if not await access_svc.verify_manager_role(current_user["did"]):
+            raise HTTPException(status_code=403, detail="Can only check your own access")
 
     access_service = AccessService()
 

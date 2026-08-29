@@ -43,7 +43,14 @@ class IPFSService:
         document_hash = hashlib.sha256(content).hexdigest()
 
         if not self.client:
-            # Fallback: return mock result for development
+            from app.config import get_settings
+            _settings = get_settings()
+            if not _settings.debug:
+                raise RuntimeError(
+                    "IPFS client not available and not in debug mode. "
+                    "Configure IPFS_API_URL or run in debug mode for mock storage."
+                )
+            # Mock fallback for local development only
             return {
                 "cid": f"QmMock{document_hash[:16]}",
                 "metadata_cid": f"QmMockMeta{document_hash[:16]}",

@@ -39,7 +39,7 @@ class SecurityMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next) -> Response:
         # Validate request if enabled
         if self.enable_input_validation:
-            validation_error = self._validate_request(request)
+            validation_error = await self._validate_request(request)
             if validation_error:
                 from starlette.responses import JSONResponse
                 return JSONResponse(
@@ -57,12 +57,14 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
-            "style-src 'self' 'unsafe-inline'; "
+            "script-src 'self'; "
+            "style-src 'self'; "
             "img-src 'self' data: https:; "
             "font-src 'self' data:; "
             "connect-src 'self' ws: wss:; "
-            "frame-ancestors 'none'"
+            "frame-ancestors 'none'; "
+            "base-uri 'self'; "
+            "form-action 'self'"
         )
 
         # Remove server header
@@ -76,7 +78,7 @@ class SecurityMiddleware(BaseHTTPMiddleware):
 
         return response
 
-    def _validate_request(self, request: Request) -> str | None:
+    async def _validate_request(self, request: Request) -> str | None:
         """Validate request for common attack patterns."""
         # Check URL path
         path = str(request.url.path)
@@ -87,6 +89,20 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         query = str(request.url.query)
         if query and self._contains_malicious_pattern(query):
             return "Potentially malicious query parameter detected"
+
+        # Check request body for POST/PUT/PATCH (only JSON)
+        if request.method in ("POST", "PUT", "PATCH"):
+            content_type = request.headers.get("content-type", "")
+            if "application/json" in content_type:
+                try:
+                    body = await request.body()
+                    if body and len(body) < 1_000_000:  # Only check < 1MB bodies
+                        import json
+                        body_text = body.decode("utf-8", errors="ignore")
+                        if self._contains_malicious_pattern(body_text):
+                            return "Potentially malicious request body detected"
+                except Exception:
+                    pass
 
         return None
 

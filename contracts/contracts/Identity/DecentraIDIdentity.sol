@@ -16,7 +16,6 @@ contract DecentraIDIdentity is IIdentity, AccessControl, ReentrancyGuard {
 
     mapping(address => DIDDocument) private didRegistry;
     mapping(address => mapping(bytes32 => bool)) private authorizedMethods;
-    mapping(address => uint256) private nonces;
 
     constructor() {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -183,12 +182,5 @@ contract DecentraIDIdentity is IIdentity, AccessControl, ReentrancyGuard {
         return authorizedMethods[_controller][_method];
     }
 
-    /**
-     * @notice Get the nonce for an address (for replay protection)
-     * @param _address The address
-     * @return The current nonce
-     */
-    function getNonce(address _address) external view returns (uint256) {
-        return nonces[_address];
-    }
+
 }

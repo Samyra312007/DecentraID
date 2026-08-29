@@ -2,6 +2,15 @@
 Pytest configuration and fixtures for DecentraID backend tests.
 """
 
+import os
+
+# Set test-mode environment BEFORE any app imports.
+# This overrides the production-safe defaults in config.py so
+# tests can run without a full .env file.
+os.environ["DEBUG"] = "true"
+os.environ["JWT_SECRET"] = "test-jwt-secret-not-for-production"
+os.environ["ENCRYPTION_KEY"] = "test-encryption-key-not-for-production"
+
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app

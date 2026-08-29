@@ -9,13 +9,29 @@ from pydantic import BaseModel, Field
 
 class DIDCreateRequest(BaseModel):
     """Request to create a new DID."""
-    public_key: str = Field(..., description="Public key for the DID")
+    public_key: str = Field(
+        ...,
+        description="Public key for the DID",
+        min_length=1,
+        max_length=512,
+    )
     metadata: dict = Field(default_factory=dict, description="Optional DID metadata")
+
+    # Prevent excessively large metadata payloads
+    def model_post_init(self, __context) -> None:
+        import json
+        if len(json.dumps(self.metadata, default=str)) > 10_000:
+            raise ValueError("Metadata payload too large (max 10KB)")
 
 
 class DIDUpdateRequest(BaseModel):
     """Request to update DID metadata."""
     metadata: dict = Field(..., description="Updated metadata")
+
+    def model_post_init(self, __context) -> None:
+        import json
+        if len(json.dumps(self.metadata, default=str)) > 10_000:
+            raise ValueError("Metadata payload too large (max 10KB)")
 
 
 class VerificationMethod(BaseModel):

@@ -42,7 +42,14 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.limiter = RateLimiter(requests_per_minute)
 
     async def dispatch(self, request: Request, call_next):
-        client_ip = request.client.host if request.client else "unknown"
+        # Use X-Forwarded-For when behind a trusted reverse proxy (Nginx).
+        # The rightmost untrusted IP is the true client.
+        forwarded_for = request.headers.get("x-forwarded-for")
+        if forwarded_for:
+            # Take the leftmost address (original client before proxy chain)
+            client_ip = forwarded_for.split(",")[0].strip()
+        else:
+            client_ip = request.client.host if request.client else "unknown"
 
         if not self.limiter.is_allowed(client_ip):
             return JSONResponse(

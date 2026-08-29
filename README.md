@@ -13,7 +13,7 @@
 
 ## Table of Contents
 
-- [Problem Statement](#problem-statement)
+- [Problem Understanding](#problem-understanding)
 - [Solution Overview](#solution-overview)
 - [Architecture](#architecture)
 - [How It Works](#how-it-works)
@@ -33,12 +33,7 @@
 
 ---
 
-## Problem Statement
-
-**Problem Statement ID:** SIH26125  
-**Organization:** Bharat Electronics Limited (BEL)  
-**Theme:** Blockchain & Cybersecurity  
-**Category:** Software
+## Problem Understanding
 
 Every organization today relies on centralized Identity and Access Management (IAM) systems. This creates a single point of failure. When that one server is compromised, ALL user identities and access rights are at risk. Additionally, there is no tamper-proof way to prove who owns what digital asset such as documents, licenses, or certificates.
 
@@ -72,7 +67,7 @@ Every organization today relies on centralized Identity and Access Management (I
 
 ## Solution Overview
 
-DecentraID is a blockchain-based platform where users own their identity (DID), organizations control access through smart contracts, and digital assets are verifiable NFTs -- all without a central authority.
+DecentraID is a blockchain-based platform where users own their identity (DID), organizations control access through smart contracts, and digital assets are verifiable NFTs all without a central authority.
 
 ### How DecentraID Addresses the Problem
 

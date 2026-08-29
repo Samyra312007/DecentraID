@@ -8,9 +8,29 @@ from pydantic import BaseModel, Field
 
 class AccessRequestModel(BaseModel):
     """Request to access a resource."""
-    resource_id: str = Field(..., description="Resource identifier")
-    action: str = Field(..., description="Action to perform (read, write, delete)")
-    reason: str = Field(default="", description="Reason for the request")
+    resource_id: str = Field(
+        ...,
+        description="Resource identifier",
+        min_length=1,
+        max_length=256,
+    )
+    action: str = Field(
+        ...,
+        description="Action to perform (read, write, delete)",
+        min_length=1,
+        max_length=64,
+    )
+    reason: str = Field(
+        default="",
+        description="Reason for the request",
+        max_length=1000,
+    )
+
+    # Validate action is from allowed set
+    def model_post_init(self, __context) -> None:
+        allowed_actions = {"read", "write", "delete", "share", "admin", "authenticate"}
+        if self.action not in allowed_actions:
+            raise ValueError(f"Invalid action '{self.action}'. Must be one of: {', '.join(sorted(allowed_actions))}")
 
 
 class AccessCheckResponse(BaseModel):

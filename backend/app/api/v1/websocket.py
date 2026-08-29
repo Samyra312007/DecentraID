@@ -109,13 +109,9 @@ async def websocket_endpoint(websocket: WebSocket):
     """
     WebSocket endpoint for real-time events.
 
-    Clients receive notifications for:
-    - access_request: New access request received
-    - access_granted: Access was granted
-    - access_denied: Access was denied
-    - anomaly_alert: New anomaly detected
-    - did_created: New DID created
-    - asset_minted: New asset minted
+    Authentication: Client must send a JSON message with {"token": "<jwt>"}
+    as the first message after connection. The token is verified before
+    accepting subscriptions.
 
     Client can send JSON messages to subscribe/unsubscribe:
     {"action": "subscribe", "topics": ["anomaly_alert", "access_request"]}
@@ -124,6 +120,44 @@ async def websocket_endpoint(websocket: WebSocket):
     """
     await ws_manager.connect(websocket)
     ws_manager.start_heartbeat()
+
+    # --- Authentication handshake ---
+    try:
+        raw = await asyncio.wait_for(websocket.receive_text(), timeout=15)
+        msg = json.loads(raw)
+        token = msg.get("token", "")
+        if not token:
+            await ws_manager.send_personal(websocket, {
+                "type": "error",
+                "data": {"message": "Authentication required. Send {\"token\": \"<jwt>\"} as the first message."}
+            })
+            ws_manager.disconnect(websocket)
+            return
+
+        # Verify JWT
+        from app.services.auth_service import verify_token
+        payload = verify_token(token)
+        authenticated_did = payload.get("sub", "")
+
+        await ws_manager.send_personal(websocket, {
+            "type": "authenticated",
+            "data": {"did": authenticated_did}
+        })
+    except asyncio.TimeoutError:
+        await ws_manager.send_personal(websocket, {
+            "type": "error",
+            "data": {"message": "Authentication timeout. Send token within 15 seconds."}
+        })
+        ws_manager.disconnect(websocket)
+        return
+    except Exception:
+        await ws_manager.send_personal(websocket, {
+            "type": "error",
+            "data": {"message": "Invalid authentication token."}
+        })
+        ws_manager.disconnect(websocket)
+        return
+    # --- End authentication handshake ---
 
     try:
         while True:

@@ -115,8 +115,12 @@ async def list_assets(
 
 
 @router.get("/{token_id}/verify")
-async def verify_asset(token_id: int):
-    """Verify asset authenticity on-chain."""
+async def verify_asset(
+    token_id: int,
+    current_user: dict = Depends(get_current_user),
+):
+    """Verify asset authenticity on-chain.\n\n    Requires authentication. Read-only operation — any authenticated user can verify any asset.
+    """
 
     asset_service = AssetService()
     valid, metadata = await asset_service.verify_asset(token_id)

@@ -23,12 +23,14 @@ contract DecentraIDAccessControl is IDecentraAccess, AccessControl, ReentrancyGu
     mapping(bytes32 => Policy) private policies;
     mapping(bytes32 => AccessGrant) private grants;
     mapping(bytes32 => AccessRequest) private requests;
-    mapping(address => uint256) private nonces;
-
     bytes32[] private allRoleIds;
     bytes32[] private allPolicyIds;
 
     uint256 private requestNonce;
+
+    uint256 public constant MAX_ROLES = 256;
+    uint256 public constant MAX_POLICIES = 1024;
+    uint256 public constant DEFAULT_GRANT_EXPIRY = 30 days;
 
     modifier onlyAppRole(bytes32 role) {
         require(hasRole(role, msg.sender), "Unauthorized");
@@ -67,6 +69,8 @@ contract DecentraIDAccessControl is IDecentraAccess, AccessControl, ReentrancyGu
         bytes32 roleId = keccak256(
             abi.encodePacked(_name, block.timestamp, msg.sender)
         );
+
+        require(allRoleIds.length < MAX_ROLES, "Too many roles");
 
         roles[roleId] = Role({
             roleId: roleId,
@@ -135,6 +139,8 @@ contract DecentraIDAccessControl is IDecentraAccess, AccessControl, ReentrancyGu
         bytes32 policyId = keccak256(
             abi.encodePacked(_resourceType, _action, block.timestamp)
         );
+
+        require(allPolicyIds.length < MAX_POLICIES, "Too many policies");
 
         policies[policyId] = Policy({
             policyId: policyId,
@@ -236,7 +242,7 @@ contract DecentraIDAccessControl is IDecentraAccess, AccessControl, ReentrancyGu
                 resourceId: accessRequest.resourceId,
                 action: accessRequest.action,
                 grantedAt: block.timestamp,
-                expiresAt: 0,
+                expiresAt: block.timestamp + DEFAULT_GRANT_EXPIRY,
                 revoked: false
             });
 
@@ -289,6 +295,37 @@ contract DecentraIDAccessControl is IDecentraAccess, AccessControl, ReentrancyGu
         }
 
         return hasRequiredRole;
+    }
+
+    /**
+     * @notice Check if a specific grant is still valid (not expired, not revoked)
+     * @param _grantId The grant ID to check
+     * @return True if the grant is valid
+     */
+    function isGrantValid(bytes32 _grantId)
+        external
+        view
+        returns (bool)
+    {
+        AccessGrant storage grant = grants[_grantId];
+        if (grant.did == address(0)) return false; // Grant doesn't exist
+        if (grant.revoked) return false;
+        if (grant.expiresAt > 0 && block.timestamp > grant.expiresAt) return false;
+        return true;
+    }
+
+    /**
+     * @notice Revoke an active grant
+     * @param _grantId The grant to revoke
+     */
+    function revokeGrant(bytes32 _grantId) external onlyManagerOrAdmin {
+        AccessGrant storage grant = grants[_grantId];
+        require(grant.did != address(0), "Grant not found");
+        require(!grant.revoked, "Grant already revoked");
+
+        grant.revoked = true;
+        emit AccessRevoked(_grantId, block.timestamp);
+    }
     }
 
     /**

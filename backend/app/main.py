@@ -29,25 +29,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title=f"{settings.app_name} API",
-    description="""DecentraID — Blockchain-based Decentralized Identity Platform
-
-## Features
-- **DID Management**: Create, resolve, and update decentralized identities on Polygon
-- **NFT Assets**: Mint, transfer, and verify digital assets as ERC-721 NFTs
-- **Access Control**: Role-based and attribute-based access control via smart contracts
-- **IPFS Storage**: Decentralized document storage with content verification
-- **Anomaly Detection**: AI/ML-powered security monitoring
-
-## Authentication
-All protected endpoints require a JWT Bearer token obtained via `/api/v1/auth/login`.
-
-## Blockchain
-All identity and asset operations are recorded on the Polygon Amoy testnet.
-""",
+    description="""DecentraID — Blockchain-based Decentralized Identity Platform""",
     version=settings.app_version,
     lifespan=lifespan,
-    docs_url="/docs",
-    redoc_url="/redoc",
+    # Only expose API docs in debug/development mode
+    docs_url="/docs" if settings.debug else None,
+    redoc_url="/redoc" if settings.debug else None,
+    openapi_url="/openapi.json" if settings.debug else None,
     openapi_tags=[
         {"name": "Authentication", "description": "Wallet signature based login"},
         {"name": "DID", "description": "Decentralized Identity management"},
@@ -62,14 +50,16 @@ All identity and asset operations are recorded on the Polygon Amoy testnet.
 
 # ========== Middleware ==========
 
-# CORS
+# CORS — restrictive policy to prevent credential theft
 origins = [origin.strip() for origin in settings.cors_origins.split(",")]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Accept"],
+    expose_headers=["X-Request-ID"],
+    max_age=600,
 )
 
 # Security headers
@@ -82,44 +72,6 @@ app.add_middleware(RateLimitMiddleware, requests_per_minute=60)
 
 app.include_router(api_router, prefix="/api/v1")
 app.include_router(health_router)
-
-
-# ========== WebSocket ==========
-
-class ConnectionManager:
-    """Global WebSocket connection manager."""
-
-    def __init__(self):
-        self.active_connections: list[WebSocket] = []
-
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
-
-    def disconnect(self, websocket: WebSocket):
-        if websocket in self.active_connections:
-            self.active_connections.remove(websocket)
-
-    async def broadcast(self, message: dict):
-        for connection in self.active_connections:
-            try:
-                await connection.send_json(message)
-            except Exception:
-                pass
-
-
-ws_manager = ConnectionManager()
-
-
-@app.websocket("/ws/events")
-async def websocket_endpoint(websocket: WebSocket):
-    """WebSocket endpoint for real-time event notifications."""
-    await ws_manager.connect(websocket)
-    try:
-        while True:
-            data = await websocket.receive_text()
-    except WebSocketDisconnect:
-        ws_manager.disconnect(websocket)
 
 
 if __name__ == "__main__":

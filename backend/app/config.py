@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     # Application
     app_name: str = "DecentraID"
     app_version: str = "1.0.0"
-    debug: bool = True
+    debug: bool = False
 
     # Database
     database_url: str = "postgresql+asyncpg://user:password@localhost:5432/decentraid"
@@ -42,11 +42,27 @@ class Settings(BaseSettings):
     ipfs_api_url: str = "/dns/localhost/tcp/5001"
     ipfs_gateway_url: str = "http://localhost:8080"
 
-    # Security
-    jwt_secret: str = "change-me-in-production"
+    # Security — these MUST be set via environment variables in production.
+    # The defaults here are ONLY for local development. If either is left
+    # at its default value when debug=False, the application will refuse to start.
+    jwt_secret: str = "dev-only-jwt-secret-not-for-production"
     jwt_algorithm: str = "HS256"
-    jwt_expiration_hours: int = 24
-    encryption_key: str = "change-me-in-production"
+    jwt_expiration_hours: int = 1
+    encryption_key: str = "dev-only-encryption-key-not-for-production"
+
+    def model_post_init(self, __context) -> None:
+        """Validate that critical secrets are not defaults in production."""
+        if not self.debug:
+            dangerous_defaults = {
+                "jwt_secret": self.jwt_secret,
+                "encryption_key": self.encryption_key,
+            }
+            for name, value in dangerous_defaults.items():
+                if value.startswith("dev-only-"):
+                    raise ValueError(
+                        f"CRITICAL: '{name}' is still at its insecure default value. "
+                        f"Set a strong random value via environment variable in production."
+                    )
 
     # Anomaly Detection
     anomaly_service_url: str = "http://localhost:8001"
