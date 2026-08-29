@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { AssetGrid } from '@/components/assets/AssetGrid';
 import { MintForm } from '@/components/assets/MintForm';
 import { TransferModal } from '@/components/assets/TransferModal';
@@ -22,11 +21,11 @@ export default function AssetsPage() {
 
   if (!connected) {
     return (
-      <div className="space-y-8">
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-bold text-white">Assets</h1>
-          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Manage your NFT credentials and documents</p>
-        </motion.div>
+      <div className="space-y-5">
+        <div>
+          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Assets</h1>
+          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Manage your NFT credentials and documents</p>
+        </div>
         <div className="max-w-md"><WalletConnect /></div>
       </div>
     );
@@ -34,25 +33,25 @@ export default function AssetsPage() {
 
   if (view === 'mint') {
     return (
-      <div className="space-y-8">
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-bold text-white">Mint New Asset</h1>
-          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Create a new NFT credential</p>
-        </motion.div>
+      <div className="space-y-5">
+        <div>
+          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Mint New Asset</h1>
+          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Create a new NFT credential</p>
+        </div>
         <div className="max-w-2xl"><MintForm onSuccess={() => setView('grid')} onCancel={() => setView('grid')} /></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Assets</h1>
-          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Manage your NFT credentials and documents</p>
+          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Assets</h1>
+          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Manage your NFT credentials and documents</p>
         </div>
-        <button onClick={() => setView('mint')} className="btn-primary"><span>+ Mint Asset</span></button>
-      </motion.div>
+        <button onClick={() => setView('mint')} className="btn-primary">+ Mint Asset</button>
+      </div>
 
       <AssetGrid assets={mockAssets} onSelectAsset={(asset) => setTransferAsset(asset)} />
 

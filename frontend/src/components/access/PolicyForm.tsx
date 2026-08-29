@@ -35,7 +35,6 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
     setError(null);
 
     try {
-      // In production, this would call the API
       console.log('Creating policy:', formData);
       onSuccess?.();
     } catch (err) {
@@ -47,11 +46,11 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-6" style={{ color: 'var(--color-ink)' }}>Create Access Policy</h2>
-      
+      <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-5">Create Access Policy</h2>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Policy Name</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Policy Name</label>
           <input
             type="text"
             value={formData.name}
@@ -63,17 +62,18 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Description</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Description</label>
           <textarea
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="input h-20 resize-none"
+            className="input resize-none"
+            rows={2}
             placeholder="Describe this policy"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Resource Type</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Resource Type</label>
           <select
             value={formData.resourceType}
             onChange={(e) => setFormData({ ...formData, resourceType: e.target.value })}
@@ -89,26 +89,18 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Allowed Actions</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Allowed Actions</label>
           <div className="flex flex-wrap gap-2">
             {availableActions.map(action => (
               <button
                 key={action}
                 type="button"
                 onClick={() => toggleAction(action)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-3.5 py-1.5 rounded-full text-[13px] font-medium border transition-colors ${
                   formData.allowedActions.includes(action)
-                    ? 'text-white'
-                    : ''
+                    ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
+                    : 'bg-transparent text-[var(--color-text-primary)] border-[var(--color-border-strong)] hover:border-[var(--color-text-muted)]'
                 }`}
-                style={{
-                  backgroundColor: formData.allowedActions.includes(action)
-                    ? 'var(--color-primary)'
-                    : 'var(--color-surface-strong)',
-                  color: formData.allowedActions.includes(action)
-                    ? 'var(--color-on-primary)'
-                    : 'var(--color-ink)',
-                }}
               >
                 {action}
               </button>
@@ -117,7 +109,7 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Required Role</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Required Role</label>
           <select
             value={formData.requiredRole}
             onChange={(e) => setFormData({ ...formData, requiredRole: e.target.value })}
@@ -131,12 +123,12 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl text-sm" style={{ backgroundColor: '#fef2f2', color: 'var(--color-semantic-down)' }}>
+          <div className="p-3 rounded-lg text-[13px] bg-[var(--color-danger)]/10 text-[var(--color-danger)]">
             {error}
           </div>
         )}
 
-        <div className="flex gap-3 pt-4">
+        <div className="flex gap-3 pt-2">
           <button type="button" onClick={onCancel} className="btn-secondary flex-1" disabled={loading}>
             Cancel
           </button>

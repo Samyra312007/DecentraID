@@ -9,14 +9,14 @@ interface AccessMatrixProps {
 export function AccessMatrix({ roles, resources, permissions }: AccessMatrixProps) {
   return (
     <div className="card overflow-x-auto">
-      <h2 className="text-xl font-semibold mb-6" style={{ color: 'var(--color-ink)' }}>Access Matrix</h2>
-      
+      <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-5">Access Matrix</h2>
+
       <table className="w-full">
         <thead>
           <tr>
-            <th className="text-left p-3 text-sm font-medium" style={{ color: 'var(--color-muted)' }}>Role / Resource</th>
+            <th className="text-left p-2.5 text-[13px] font-medium text-[var(--color-text-muted)]">Role / Resource</th>
             {resources.map(resource => (
-              <th key={resource} className="text-center p-3 text-sm font-medium" style={{ color: 'var(--color-muted)' }}>
+              <th key={resource} className="text-center p-2.5 text-[13px] font-medium text-[var(--color-text-muted)]">
                 {resource}
               </th>
             ))}
@@ -24,20 +24,18 @@ export function AccessMatrix({ roles, resources, permissions }: AccessMatrixProp
         </thead>
         <tbody>
           {roles.map(role => (
-            <tr key={role} className="border-t" style={{ borderColor: 'var(--color-hairline-soft)' }}>
-              <td className="p-3 text-sm font-medium" style={{ color: 'var(--color-ink)' }}>{role}</td>
+            <tr key={role} className="border-t border-[var(--color-border)]">
+              <td className="p-2.5 text-[13px] font-medium text-[var(--color-text-primary)]">{role}</td>
               {resources.map(resource => {
                 const hasAccess = permissions[role]?.[resource] || false;
                 return (
-                  <td key={resource} className="text-center p-3">
+                  <td key={resource} className="text-center p-2.5">
                     <button
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center mx-auto transition-colors ${
-                        hasAccess ? 'text-white' : ''
+                      className={`w-7 h-7 rounded flex items-center justify-center mx-auto text-[12px] transition-colors ${
+                        hasAccess
+                          ? 'bg-[var(--color-success)]/15 text-[var(--color-success)]'
+                          : 'bg-white/[0.04] text-[var(--color-text-muted)]'
                       }`}
-                      style={{
-                        backgroundColor: hasAccess ? 'var(--color-semantic-up)' : 'var(--color-surface-strong)',
-                        color: hasAccess ? 'white' : 'var(--color-muted)',
-                      }}
                     >
                       {hasAccess ? '✓' : '—'}
                     </button>

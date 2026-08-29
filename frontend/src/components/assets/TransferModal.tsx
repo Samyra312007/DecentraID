@@ -33,22 +33,27 @@ export function TransferModal({ asset, isOpen, onClose, onTransfer }: TransferMo
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="card w-full max-w-md mx-4">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold" style={{ color: 'var(--color-ink)' }}>Transfer Asset</h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl">✕</button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
+      <div className="card w-full max-w-md mx-4 relative z-10">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)]">Transfer Asset</h2>
+          <button onClick={onClose} className="p-1.5 -mr-1.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] hover:bg-white/[0.04] transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
-        <div className="p-4 rounded-xl mb-4" style={{ backgroundColor: 'var(--color-surface-soft)' }}>
-          <p className="text-sm" style={{ color: 'var(--color-muted)' }}>Transferring</p>
-          <p className="font-semibold" style={{ color: 'var(--color-ink)' }}>{asset.name}</p>
-          <p className="text-xs font-mono" style={{ color: 'var(--color-muted)' }}>Token #{asset.token_id}</p>
+        <div className="p-4 rounded-lg bg-white/[0.03] mb-5">
+          <p className="text-[12px] text-[var(--color-text-muted)] mb-1">Transferring</p>
+          <p className="text-[14px] font-medium text-[var(--color-text-primary)]">{asset.name}</p>
+          <p className="text-[12px] font-mono text-[var(--color-text-muted)]">Token #{asset.token_id}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Recipient Address</label>
+            <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Recipient Address</label>
             <input
               type="text"
               value={toAddress}
@@ -60,12 +65,12 @@ export function TransferModal({ asset, isOpen, onClose, onTransfer }: TransferMo
           </div>
 
           {error && (
-            <div className="p-3 rounded-xl text-sm" style={{ backgroundColor: '#fef2f2', color: 'var(--color-semantic-down)' }}>
+            <div className="p-3 rounded-lg text-[13px] bg-[var(--color-danger)]/10 text-[var(--color-danger)]">
               {error}
             </div>
           )}
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-3 pt-1">
             <button type="button" onClick={onClose} className="btn-secondary flex-1" disabled={loading}>
               Cancel
             </button>

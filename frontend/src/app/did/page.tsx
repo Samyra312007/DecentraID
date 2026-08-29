@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { DIDCard } from '@/components/did/DIDCard';
 import { DIDCreateForm } from '@/components/did/DIDCreateForm';
 import { DIDDetail } from '@/components/did/DIDDetail';
@@ -41,11 +40,11 @@ export default function DIDPage() {
 
   if (!connected) {
     return (
-      <div className="space-y-8">
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-bold text-white">Decentralized Identifiers</h1>
-          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Manage your DIDs on Polygon blockchain</p>
-        </motion.div>
+      <div className="space-y-5">
+        <div>
+          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Decentralized Identifiers</h1>
+          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Manage your DIDs on Polygon blockchain</p>
+        </div>
         <div className="max-w-md"><WalletConnect /></div>
       </div>
     );
@@ -53,11 +52,11 @@ export default function DIDPage() {
 
   if (view === 'create') {
     return (
-      <div className="space-y-8">
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-bold text-white">Create New DID</h1>
-          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Set up a new decentralized identity</p>
-        </motion.div>
+      <div className="space-y-5">
+        <div>
+          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Create New DID</h1>
+          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Set up a new decentralized identity</p>
+        </div>
         <div className="max-w-2xl"><DIDCreateForm onSuccess={() => setView('list')} onCancel={() => setView('list')} /></div>
       </div>
     );
@@ -65,27 +64,25 @@ export default function DIDPage() {
 
   if (view === 'detail' && selectedDID) {
     return (
-      <div className="space-y-8">
+      <div>
         <DIDDetail did={selectedDID} onBack={() => { setView('list'); setSelectedDID(null); }} />
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Decentralized Identifiers</h1>
-          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Manage your DIDs on Polygon blockchain</p>
+          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Decentralized Identifiers</h1>
+          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Manage your DIDs on Polygon blockchain</p>
         </div>
-        <button onClick={() => setView('create')} className="btn-primary"><span>+ Create DID</span></button>
-      </motion.div>
+        <button onClick={() => setView('create')} className="btn-primary">+ Create DID</button>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockDIDs.map((did, i) => (
-          <motion.div key={did.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-            <DIDCard did={did} onSelect={(d) => { setSelectedDID(d); setView('detail'); }} />
-          </motion.div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {mockDIDs.map((did) => (
+          <DIDCard key={did.id} did={did} onSelect={(d) => { setSelectedDID(d); setView('detail'); }} />
         ))}
       </div>
     </div>

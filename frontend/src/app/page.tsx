@@ -1,46 +1,61 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
 import Link from 'next/link';
-import { ParticleField } from '@/components/landing/ParticleField';
 
 const features = [
   {
-    icon: '🔐',
     title: 'Self-Sovereign Identity',
     description: 'Own your digital identity with cryptographic key pairs. No central authority controls your data.',
-    gradient: 'from-indigo-500 to-blue-500',
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+      </svg>
+    ),
   },
   {
-    icon: '🛡️',
     title: 'Smart Contract Access',
     description: 'RBAC and ABAC enforced on-chain via Solidity smart contracts. Tamper-proof access policies.',
-    gradient: 'from-purple-500 to-pink-500',
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+    ),
   },
   {
-    icon: '💎',
     title: 'NFT Asset Management',
     description: 'Digital assets as verifiable ERC-721 NFTs. Provable ownership, transferable credentials.',
-    gradient: 'from-cyan-500 to-teal-500',
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+    ),
   },
   {
-    icon: '🤖',
     title: 'AI Anomaly Detection',
     description: 'ML-powered behavioral profiling detects unusual access patterns in real time.',
-    gradient: 'from-amber-500 to-orange-500',
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+      </svg>
+    ),
   },
   {
-    icon: '⛓️',
     title: 'Polygon Layer 2',
-    description: '65,000 TPS with sub-1-rupee gas fees. Ethereum-grade security at fraction of cost.',
-    gradient: 'from-violet-500 to-purple-500',
+    description: '65,000 TPS with sub-1-rupee gas fees. Ethereum-grade security at a fraction of the cost.',
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    ),
   },
   {
-    icon: '🌐',
     title: 'W3C DID Standard',
     description: 'Interoperable with global decentralized identity standards. Vendor-agnostic by design.',
-    gradient: 'from-emerald-500 to-green-500',
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+      </svg>
+    ),
   },
 ];
 
@@ -59,338 +74,202 @@ const workflow = [
   { step: '05', title: 'Monitor & Audit', desc: 'AI detects anomalies. Immutable audit trail on blockchain.' },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
-};
-
-const stagger = {
-  visible: { transition: { staggerChildren: 0.1 } },
-};
+const comparisons = [
+  ['Identity Storage', 'Central server', 'Blockchain (decentralized)'],
+  ['Access Control', 'Database rules', 'Smart contracts (on-chain)'],
+  ['Asset Ownership', 'Spreadsheets', 'NFTs (verifiable)'],
+  ['Cross-org Trust', 'Manual verification', 'Cryptographic proof'],
+  ['Anomaly Detection', 'None or rule-based', 'AI/ML powered'],
+  ['Tamper Evidence', 'Logs (alterable)', 'Blockchain (immutable)'],
+];
 
 export default function LandingPage() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll();
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
-
   return (
-    <div className="min-h-screen" style={{ background: 'var(--color-bg-deep)' }}>
-      <ParticleField />
-
-      {/* Ambient glow */}
-      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-radial opacity-60" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-radial-purple opacity-40" />
-        <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-radial-cyan opacity-30" />
-      </div>
-
-      {/* ========== NAVIGATION ========== */}
-      <nav className="fixed top-0 left-0 right-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="glass-strong rounded-2xl px-6 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg"
-                style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
-                D
-              </div>
-              <span className="text-lg font-semibold text-white">DecentraID</span>
+    <div className="min-h-screen bg-[var(--color-bg-deep)]">
+      {/* ── Navigation ── */}
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-bg-deep)]/80 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-[var(--color-primary)] flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5" />
+                <path d="M2 12l10 5 10-5" />
+              </svg>
             </div>
-            <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-sm text-[var(--color-text-secondary)] hover:text-white transition-colors">Features</a>
-              <a href="#how-it-works" className="text-sm text-[var(--color-text-secondary)] hover:text-white transition-colors">How It Works</a>
-              <a href="#stats" className="text-sm text-[var(--color-text-secondary)] hover:text-white transition-colors">Impact</a>
-              <Link href="/dashboard" className="btn-primary text-sm" style={{ height: 40, padding: '8px 20px' }}>
-                <span>Launch App</span>
-              </Link>
-            </div>
+            <span className="text-[15px] font-semibold text-[var(--color-text-primary)]">DecentraID</span>
+          </div>
+          <div className="hidden md:flex items-center gap-8">
+            <a href="#features" className="text-[13px] font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">Features</a>
+            <a href="#how-it-works" className="text-[13px] font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">How It Works</a>
+            <a href="#comparison" className="text-[13px] font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">Compare</a>
+            <Link href="/dashboard" className="btn-primary h-9 text-[13px] px-5">Launch App</Link>
           </div>
         </div>
       </nav>
 
-      {/* ========== HERO ========== */}
-      <motion.section
-        ref={heroRef}
-        style={{ opacity: heroOpacity, scale: heroScale }}
-        className="relative z-10 min-h-screen flex items-center justify-center px-6"
-      >
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
-            style={{ background: 'rgba(99, 102, 241, 0.1)', border: '1px solid rgba(99, 102, 241, 0.2)' }}
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-sm text-indigo-300">Built for SIH 2026 -- Bharat Electronics Limited</span>
-          </motion.div>
-
-          {/* Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-            className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6"
-          >
-            <span className="text-white">Your Identity.</span>
+      {/* ── Hero ── */}
+      <section className="relative pt-32 pb-24 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal leading-[1.05] tracking-tight text-[var(--color-text-primary)] mb-6">
+            Your Identity.
             <br />
-            <span className="gradient-text">Your Assets.</span>
+            Your Assets.
             <br />
-            <span className="text-white">Your Control.</span>
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
-            style={{ color: 'var(--color-text-secondary)' }}
-          >
+            Your Control.
+          </h1>
+          <p className="text-lg md:text-xl text-[var(--color-text-secondary)] max-w-2xl mx-auto mb-10 leading-relaxed">
             A blockchain-based platform where users own their identity, organizations
             control access through smart contracts, and digital assets are verifiable NFTs
-            -- all without a central authority.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <Link href="/dashboard" className="btn-primary text-base" style={{ height: 56, padding: '12px 32px' }}>
-              <span>Get Started</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'relative', zIndex: 1 }}>
-                <path d="M5 12h14M12 5l7 7-7 7"/>
+            — all without a central authority.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link href="/dashboard" className="btn-primary h-12 text-[15px] px-8">
+              Get Started
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
-            <a href="#features" className="btn-secondary text-base" style={{ height: 56, padding: '12px 32px' }}>
+            <a href="#features" className="btn-secondary h-12 text-[15px] px-8">
               Learn More
             </a>
-          </motion.div>
-
-          {/* Scroll indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2"
-          >
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2"
-            >
-              <div className="w-1 h-2 rounded-full bg-white/40" />
-            </motion.div>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* ========== STATS TICKER ========== */}
-      <section id="stats" className="relative z-10 py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6"
-          >
-            {stats.map((stat) => (
-              <motion.div
-                key={stat.label}
-                variants={fadeUp}
-                className="glass text-center py-8 px-4"
-              >
-                <div className="text-3xl md:text-4xl font-bold gradient-text mb-2">{stat.value}</div>
-                <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* ========== FEATURES ========== */}
-      <section id="features" className="relative z-10 py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Why <span className="gradient-text">DecentraID</span>?
-            </h2>
-            <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--color-text-secondary)' }}>
+      {/* ── Stats ── */}
+      <section id="stats" className="py-16 px-6 border-y border-[var(--color-border)]">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className="text-3xl md:text-4xl font-normal text-[var(--color-text-primary)] mb-1 tabular-nums">{stat.value}</div>
+              <div className="text-[13px] text-[var(--color-text-muted)]">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Features ── */}
+      <section id="features" className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-normal text-[var(--color-text-primary)] mb-4">Why DecentraID?</h2>
+            <p className="text-[var(--color-text-secondary)] max-w-2xl mx-auto">
               The first platform to combine decentralized identity, smart contract access control,
               and NFT-based asset management in one integrated system.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-50px' }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((feature) => (
-              <motion.div
-                key={feature.title}
-                variants={fadeUp}
-                className="glass group p-8"
-              >
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-                  {feature.description}
-                </p>
-                <div className="mt-6 h-px w-full opacity-0 group-hover:opacity-100 transition-opacity"
-                  style={{ background: 'linear-gradient(90deg, transparent, var(--color-primary), transparent)' }} />
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ========== HOW IT WORKS ========== */}
-      <section id="how-it-works" className="relative z-10 py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              How It <span className="gradient-text">Works</span>
-            </h2>
-            <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--color-text-secondary)' }}>
-              From identity creation to AI-powered monitoring, here is the complete end-to-end flow.
-            </p>
-          </motion.div>
-
-          <div className="space-y-6">
-            {workflow.map((item, i) => (
-              <motion.div
-                key={item.step}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="glass flex items-center gap-6 p-6 md:p-8"
-              >
-                <div className="shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-bold text-white"
-                  style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
-                  {item.step}
+              <div key={feature.title} className="card group">
+                <div className="w-10 h-10 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center text-[var(--color-primary)] mb-4">
+                  {feature.icon}
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white mb-1">{item.title}</h3>
-                  <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{item.desc}</p>
-                </div>
-              </motion.div>
+                <h3 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-2">{feature.title}</h3>
+                <p className="text-[13px] leading-relaxed text-[var(--color-text-secondary)]">{feature.description}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ========== COMPARISON TABLE ========== */}
-      <section className="relative z-10 py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Traditional IAM vs <span className="gradient-text">DecentraID</span>
-            </h2>
-          </motion.div>
+      {/* ── How It Works ── */}
+      <section id="how-it-works" className="py-24 px-6 bg-[var(--color-bg-base)]">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-normal text-[var(--color-text-primary)] mb-4">How It Works</h2>
+            <p className="text-[var(--color-text-secondary)]">
+              From identity creation to AI-powered monitoring, the complete end-to-end flow.
+            </p>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="glass overflow-hidden"
-          >
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                    <th className="text-left text-sm font-semibold text-white px-6 py-4">Feature</th>
-                    <th className="text-left text-sm font-semibold px-6 py-4" style={{ color: 'var(--color-text-muted)' }}>Traditional IAM</th>
-                    <th className="text-left text-sm font-semibold gradient-text px-6 py-4">DecentraID</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ['Identity Storage', 'Central server', 'Blockchain (decentralized)'],
-                    ['Access Control', 'Database rules', 'Smart contracts (on-chain)'],
-                    ['Asset Ownership', 'Spreadsheets', 'NFTs (verifiable)'],
-                    ['Cross-org Trust', 'Manual verification', 'Cryptographic proof'],
-                    ['Anomaly Detection', 'None or rule-based', 'AI/ML powered'],
-                    ['Tamper Evidence', 'Logs (alterable)', 'Blockchain (immutable)'],
-                  ].map(([feature, trad, decentra]) => (
-                    <tr key={feature} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                      <td className="text-sm font-medium text-white px-6 py-4">{feature}</td>
-                      <td className="text-sm px-6 py-4" style={{ color: 'var(--color-text-muted)' }}>{trad}</td>
-                      <td className="text-sm font-medium px-6 py-4" style={{ color: '#818cf8' }}>{decentra}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </motion.div>
+          <div className="space-y-4">
+            {workflow.map((item) => (
+              <div key={item.step} className="card flex items-start gap-5">
+                <div className="shrink-0 w-10 h-10 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center text-[13px] font-mono font-medium text-[var(--color-primary)]">
+                  {item.step}
+                </div>
+                <div className="pt-1">
+                  <h3 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-1">{item.title}</h3>
+                  <p className="text-[13px] text-[var(--color-text-secondary)] leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ========== CTA ========== */}
-      <section className="relative z-10 py-24 px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto glass p-12 md:p-16 text-center"
-          style={{ background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1))' }}
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+      {/* ── Comparison ── */}
+      <section id="comparison" className="py-24 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-normal text-[var(--color-text-primary)]">Traditional IAM vs DecentraID</h2>
+          </div>
+
+          <div className="card overflow-hidden p-0">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-[var(--color-border)]">
+                  <th className="text-left text-[13px] font-semibold text-[var(--color-text-primary)] px-6 py-4">Feature</th>
+                  <th className="text-left text-[13px] font-semibold text-[var(--color-text-muted)] px-6 py-4">Traditional IAM</th>
+                  <th className="text-left text-[13px] font-semibold text-[var(--color-primary)] px-6 py-4">DecentraID</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisons.map(([feature, trad, decentra]) => (
+                  <tr key={feature} className="border-b border-[var(--color-border)] last:border-0">
+                    <td className="text-[13px] font-medium text-[var(--color-text-primary)] px-6 py-3.5">{feature}</td>
+                    <td className="text-[13px] text-[var(--color-text-muted)] px-6 py-3.5">{trad}</td>
+                    <td className="text-[13px] font-medium text-[var(--color-primary)] px-6 py-3.5">{decentra}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="py-24 px-6 bg-[var(--color-bg-base)]">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-normal text-[var(--color-text-primary)] mb-4">
             Ready to take control?
           </h2>
-          <p className="text-lg mb-8 max-w-xl mx-auto" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="text-[var(--color-text-secondary)] mb-8 max-w-lg mx-auto">
             Start building your decentralized identity platform today.
             Open source, zero licensing fees, production-ready.
           </p>
-          <Link href="/dashboard" className="btn-primary text-base" style={{ height: 56, padding: '12px 32px' }}>
-            <span>Launch DecentraID</span>
+          <Link href="/dashboard" className="btn-primary h-12 text-[15px] px-8">
+            Launch DecentraID
           </Link>
-        </motion.div>
+        </div>
       </section>
 
-      {/* ========== FOOTER ========== */}
-      <footer className="relative z-10 py-12 px-6" style={{ borderTop: '1px solid var(--color-border)' }}>
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* ── Footer ── */}
+      <footer className="py-10 px-6 border-t border-[var(--color-border)]">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
-              style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
-              D
+            <div className="w-7 h-7 rounded-md bg-[var(--color-primary)] flex items-center justify-center">
+              <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5" />
+                <path d="M2 12l10 5 10-5" />
+              </svg>
             </div>
-            <span className="font-semibold text-white">DecentraID</span>
+            <span className="text-[13px] font-semibold text-[var(--color-text-primary)]">DecentraID</span>
           </div>
-          <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            Built for SIH 2026 -- Problem Statement SIH26125 -- Bharat Electronics Limited
+          <p className="text-[12px] text-[var(--color-text-muted)]">
+            Built for SIH 2026 — Problem Statement SIH26125 — Bharat Electronics Limited
           </p>
-          <div className="flex items-center gap-4">
-            <a href="https://github.com/Samyra312007/DecentraID" target="_blank" rel="noopener noreferrer"
-              className="text-sm hover:text-white transition-colors" style={{ color: 'var(--color-text-muted)' }}>
-              GitHub
-            </a>
-          </div>
+          <a
+            href="https://github.com/Samyra312007/DecentraID"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[13px] text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
+          >
+            GitHub
+          </a>
         </div>
       </footer>
     </div>

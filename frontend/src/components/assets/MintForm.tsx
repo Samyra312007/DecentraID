@@ -34,13 +34,12 @@ export function MintForm({ onSuccess, onCancel }: MintFormProps) {
         asset_type: formData.assetType,
         metadata: {
           description: formData.description,
-          image: '', // Would be IPFS CID after upload
+          image: '',
         },
         issuer_address: address,
         owner_address: address,
       };
 
-      // In production, this would upload to IPFS then mint
       console.log('Minting asset:', request);
       onSuccess?.();
     } catch (err) {
@@ -52,19 +51,19 @@ export function MintForm({ onSuccess, onCancel }: MintFormProps) {
 
   if (!connected) {
     return (
-      <div className="card text-center">
-        <p style={{ color: 'var(--color-muted)' }}>Please connect your wallet to mint assets</p>
+      <div className="card text-center py-8">
+        <p className="text-[13px] text-[var(--color-text-muted)]">Please connect your wallet to mint assets</p>
       </div>
     );
   }
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-6" style={{ color: 'var(--color-ink)' }}>Mint New Asset</h2>
-      
+      <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-5">Mint New Asset</h2>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Name</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Name</label>
           <input
             type="text"
             value={formData.name}
@@ -76,17 +75,18 @@ export function MintForm({ onSuccess, onCancel }: MintFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Description</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Description</label>
           <textarea
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="input h-24 resize-none"
+            className="input resize-none"
+            rows={3}
             placeholder="Describe your asset"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Asset Type</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Asset Type</label>
           <select
             value={formData.assetType}
             onChange={(e) => setFormData({ ...formData, assetType: e.target.value })}
@@ -100,10 +100,9 @@ export function MintForm({ onSuccess, onCancel }: MintFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>File (Optional)</label>
-          <div 
-            className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer hover:border-blue-500 transition-colors"
-            style={{ borderColor: 'var(--color-hairline)' }}
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">File (Optional)</label>
+          <div
+            className="border border-dashed border-[var(--color-border-strong)] rounded-lg p-8 text-center cursor-pointer hover:border-[var(--color-primary)] transition-colors"
             onClick={() => document.getElementById('file-input')?.click()}
           >
             <input
@@ -113,36 +112,31 @@ export function MintForm({ onSuccess, onCancel }: MintFormProps) {
               onChange={(e) => setFormData({ ...formData, file: e.target.files?.[0] || null })}
             />
             {formData.file ? (
-              <p className="text-sm" style={{ color: 'var(--color-ink)' }}>{formData.file.name}</p>
+              <p className="text-[13px] text-[var(--color-text-primary)]">{formData.file.name}</p>
             ) : (
               <>
-                <span className="text-3xl block mb-2">📎</span>
-                <p className="text-sm" style={{ color: 'var(--color-muted)' }}>Click to upload or drag and drop</p>
+                <svg className="w-8 h-8 mx-auto mb-2 text-[var(--color-text-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <path d="M17 8l-5-5-5 5" />
+                  <path d="M12 3v12" />
+                </svg>
+                <p className="text-[13px] text-[var(--color-text-muted)]">Click to upload or drag and drop</p>
               </>
             )}
           </div>
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl text-sm" style={{ backgroundColor: '#fef2f2', color: 'var(--color-semantic-down)' }}>
+          <div className="p-3 rounded-lg text-[13px] bg-[var(--color-danger)]/10 text-[var(--color-danger)]">
             {error}
           </div>
         )}
 
-        <div className="flex gap-3 pt-4">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="btn-secondary flex-1"
-            disabled={loading}
-          >
+        <div className="flex gap-3 pt-2">
+          <button type="button" onClick={onCancel} className="btn-secondary flex-1" disabled={loading}>
             Cancel
           </button>
-          <button
-            type="submit"
-            className="btn-primary flex-1"
-            disabled={loading}
-          >
+          <button type="submit" className="btn-primary flex-1" disabled={loading}>
             {loading ? 'Minting...' : 'Mint Asset'}
           </button>
         </div>

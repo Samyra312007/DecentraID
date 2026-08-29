@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { AnomalyDetail } from '@/components/anomaly/AnomalyDetail';
 import { WalletConnect } from '@/components/common/WalletConnect';
 import { useDecentraID } from '@/hooks/useDecentraID';
@@ -25,22 +24,22 @@ export default function AnomalyPage() {
 
   if (!connected) {
     return (
-      <div className="space-y-8">
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-bold text-white">Anomaly Detection</h1>
-          <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Monitor and analyze suspicious activity</p>
-        </motion.div>
+      <div className="space-y-5">
+        <div>
+          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Anomaly Detection</h1>
+          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Monitor and analyze suspicious activity</p>
+        </div>
         <div className="max-w-md"><WalletConnect /></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-3xl font-bold text-white">Anomaly Detection</h1>
-        <p className="mt-1" style={{ color: 'var(--color-text-muted)' }}>Monitor and analyze suspicious activity</p>
-      </motion.div>
+    <div className="space-y-5">
+      <div>
+        <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Anomaly Detection</h1>
+        <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Monitor and analyze suspicious activity</p>
+      </div>
 
       <AnomalyDetail
         score={23}

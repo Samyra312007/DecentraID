@@ -7,59 +7,53 @@ interface DIDCardProps {
   onSelect?: (did: DIDDocument) => void;
 }
 
+const statusStyles = {
+  active: 'badge-success',
+  suspended: 'badge-warning',
+  deactivated: 'badge-danger',
+};
+
 export function DIDCard({ did, onSelect }: DIDCardProps) {
-  const statusColors = {
-    active: { bg: 'rgba(16, 185, 129, 0.15)', text: '#34d399' },
-    suspended: { bg: 'rgba(245, 158, 11, 0.15)', text: '#fbbf24' },
-    deactivated: { bg: 'rgba(239, 68, 68, 0.15)', text: '#f87171' },
-  };
-
-  const status = statusColors[did.status] || statusColors.active;
-
   return (
     <div
-      className="glass cursor-pointer p-6 group"
+      className="card cursor-pointer hover:bg-[var(--color-bg-card-hover)] transition-colors"
       onClick={() => onSelect?.(did)}
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-xs"
-            style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
-          >
-            DID
+          <div className="w-10 h-10 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center">
+            <svg className="w-5 h-5 text-[var(--color-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+            </svg>
           </div>
-          <div>
-            <h3 className="font-semibold text-white">{did.name || 'Unnamed DID'}</h3>
-            <p className="text-xs font-mono" style={{ color: 'var(--color-text-muted)' }}>
+          <div className="min-w-0">
+            <h3 className="text-[14px] font-semibold text-[var(--color-text-primary)] truncate">{did.name || 'Unnamed DID'}</h3>
+            <p className="text-[12px] font-mono text-[var(--color-text-muted)] truncate">
               {did.did.slice(0, 20)}...
             </p>
           </div>
         </div>
-        <span className="badge" style={{ background: status.bg, color: status.text }}>
+        <span className={`badge ${statusStyles[did.status] || 'badge-neutral'}`}>
           {did.status}
         </span>
       </div>
 
-      <div className="space-y-2 text-sm">
+      <div className="space-y-2 text-[13px]">
         <div className="flex justify-between">
-          <span style={{ color: 'var(--color-text-muted)' }}>Controller</span>
-          <span className="font-mono text-white">{did.controller.slice(0, 8)}...{did.controller.slice(-6)}</span>
+          <span className="text-[var(--color-text-muted)]">Controller</span>
+          <span className="font-mono text-[var(--color-text-primary)]">{did.controller.slice(0, 8)}...{did.controller.slice(-6)}</span>
         </div>
         <div className="flex justify-between">
-          <span style={{ color: 'var(--color-text-muted)' }}>Created</span>
-          <span className="text-white">{new Date(did.created_at).toLocaleDateString()}</span>
+          <span className="text-[var(--color-text-muted)]">Created</span>
+          <span className="text-[var(--color-text-primary)]">{new Date(did.created_at).toLocaleDateString()}</span>
         </div>
         {did.services && did.services.length > 0 && (
           <div className="flex justify-between">
-            <span style={{ color: 'var(--color-text-muted)' }}>Services</span>
-            <span className="text-white">{did.services.length}</span>
+            <span className="text-[var(--color-text-muted)]">Services</span>
+            <span className="text-[var(--color-text-primary)]">{did.services.length}</span>
           </div>
         )}
       </div>
-
-      <div className="mt-4 h-px w-full opacity-0 group-hover:opacity-100 transition-opacity"
-        style={{ background: 'linear-gradient(90deg, transparent, var(--color-primary), transparent)' }} />
     </div>
   );
 }

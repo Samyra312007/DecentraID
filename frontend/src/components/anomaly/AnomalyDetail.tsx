@@ -24,8 +24,8 @@ interface AnomalyDetailProps {
 
 export function AnomalyDetail({ score, alerts, behaviorData, onAcknowledgeAlert }: AnomalyDetailProps) {
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="space-y-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-1">
           <RiskGauge score={score} />
         </div>
@@ -33,34 +33,33 @@ export function AnomalyDetail({ score, alerts, behaviorData, onAcknowledgeAlert 
           <BehaviorChart data={behaviorData} title="Access Pattern" />
         </div>
       </div>
-      
+
       <AlertList alerts={alerts} onAcknowledge={onAcknowledgeAlert} />
-      
-      {/* Summary Stats */}
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="card text-center">
-          <div className="text-2xl font-bold" style={{ color: 'var(--color-ink)' }}>
+        <div className="card text-center py-4">
+          <div className="text-[20px] font-bold text-[var(--color-text-primary)]">
             {alerts.filter(a => a.severity === 'critical').length}
           </div>
-          <div className="text-xs" style={{ color: 'var(--color-muted)' }}>Critical Alerts</div>
+          <div className="text-[12px] text-[var(--color-text-muted)]">Critical Alerts</div>
         </div>
-        <div className="card text-center">
-          <div className="text-2xl font-bold" style={{ color: 'var(--color-ink)' }}>
+        <div className="card text-center py-4">
+          <div className="text-[20px] font-bold text-[var(--color-text-primary)]">
             {alerts.filter(a => a.severity === 'high').length}
           </div>
-          <div className="text-xs" style={{ color: 'var(--color-muted)' }}>High Alerts</div>
+          <div className="text-[12px] text-[var(--color-text-muted)]">High Alerts</div>
         </div>
-        <div className="card text-center">
-          <div className="text-2xl font-bold" style={{ color: 'var(--color-ink)' }}>
+        <div className="card text-center py-4">
+          <div className="text-[20px] font-bold text-[var(--color-text-primary)]">
             {alerts.filter(a => !a.acknowledged).length}
           </div>
-          <div className="text-xs" style={{ color: 'var(--color-muted)' }}>Unacknowledged</div>
+          <div className="text-[12px] text-[var(--color-text-muted)]">Unacknowledged</div>
         </div>
-        <div className="card text-center">
-          <div className="text-2xl font-bold" style={{ color: 'var(--color-semantic-up)' }}>
+        <div className="card text-center py-4">
+          <div className="text-[20px] font-bold text-[var(--color-success)]">
             {alerts.filter(a => a.acknowledged).length}
           </div>
-          <div className="text-xs" style={{ color: 'var(--color-muted)' }}>Resolved</div>
+          <div className="text-[12px] text-[var(--color-text-muted)]">Resolved</div>
         </div>
       </div>
     </div>

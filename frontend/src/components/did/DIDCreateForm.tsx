@@ -30,7 +30,7 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
       const request: DIDCreateRequest = {
         controller: address,
         name: formData.name,
-        did: `did:decentraid:${address}`, // Will be generated properly
+        did: `did:decentraid:${address}`,
         document: {
           '@context': ['https://www.w3.org/ns/did/v1'],
           id: `did:decentraid:${address}`,
@@ -50,7 +50,6 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
         }] : [],
       };
 
-      // In production, this would call the API
       console.log('Creating DID:', request);
       onSuccess?.();
     } catch (err) {
@@ -62,19 +61,19 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
 
   if (!connected) {
     return (
-      <div className="card text-center">
-        <p style={{ color: 'var(--color-muted)' }}>Please connect your wallet to create a DID</p>
+      <div className="card text-center py-8">
+        <p className="text-[13px] text-[var(--color-text-muted)]">Please connect your wallet to create a DID</p>
       </div>
     );
   }
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-6" style={{ color: 'var(--color-ink)' }}>Create New DID</h2>
-      
+      <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-5">Create New DID</h2>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Name</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Name</label>
           <input
             type="text"
             value={formData.name}
@@ -86,17 +85,18 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Description</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Description</label>
           <textarea
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="input h-24 resize-none"
+            className="input resize-none"
+            rows={3}
             placeholder="Optional description for your DID"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Service Endpoint</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Service Endpoint</label>
           <input
             type="url"
             value={formData.serviceEndpoint}
@@ -107,25 +107,16 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl text-sm" style={{ backgroundColor: '#fef2f2', color: 'var(--color-semantic-down)' }}>
+          <div className="p-3 rounded-lg text-[13px] bg-[var(--color-danger)]/10 text-[var(--color-danger)]">
             {error}
           </div>
         )}
 
-        <div className="flex gap-3 pt-4">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="btn-secondary flex-1"
-            disabled={loading}
-          >
+        <div className="flex gap-3 pt-2">
+          <button type="button" onClick={onCancel} className="btn-secondary flex-1" disabled={loading}>
             Cancel
           </button>
-          <button
-            type="submit"
-            className="btn-primary flex-1"
-            disabled={loading}
-          >
+          <button type="submit" className="btn-primary flex-1" disabled={loading}>
             {loading ? 'Creating...' : 'Create DID'}
           </button>
         </div>

@@ -29,15 +29,15 @@ export function RoleManager() {
 
   return (
     <div className="card">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold" style={{ color: 'var(--color-ink)' }}>Role Management</h2>
-        <button onClick={() => setShowCreate(!showCreate)} className="btn-primary text-sm">
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)]">Role Management</h2>
+        <button onClick={() => setShowCreate(!showCreate)} className="btn-primary text-[13px]">
           {showCreate ? 'Cancel' : '+ Add Role'}
         </button>
       </div>
 
       {showCreate && (
-        <div className="p-4 rounded-xl mb-4 space-y-3" style={{ backgroundColor: 'var(--color-surface-soft)' }}>
+        <div className="p-4 rounded-lg bg-white/[0.04] mb-4 space-y-3">
           <input
             type="text"
             value={newRole.name}
@@ -58,15 +58,15 @@ export function RoleManager() {
 
       <div className="space-y-3">
         {roles.map(role => (
-          <div key={role.id} className="p-4 rounded-xl border" style={{ borderColor: 'var(--color-hairline)' }}>
+          <div key={role.id} className="p-4 rounded-lg border border-[var(--color-border)]">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold" style={{ color: 'var(--color-ink)' }}>{role.name}</h3>
-              <span className="badge">{role.members.length} members</span>
+              <h3 className="text-[14px] font-semibold text-[var(--color-text-primary)]">{role.name}</h3>
+              <span className="badge badge-neutral">{role.members.length} members</span>
             </div>
-            <p className="text-sm mb-3" style={{ color: 'var(--color-muted)' }}>{role.description}</p>
+            <p className="text-[13px] text-[var(--color-text-muted)] mb-3">{role.description}</p>
             <div className="flex flex-wrap gap-2">
               {role.members.map((member, idx) => (
-                <span key={idx} className="text-xs font-mono px-2 py-1 rounded-lg" style={{ backgroundColor: 'var(--color-surface-strong)' }}>
+                <span key={idx} className="text-[12px] font-mono px-2 py-1 rounded bg-white/[0.06] text-[var(--color-text-muted)]">
                   {member}
                 </span>
               ))}
