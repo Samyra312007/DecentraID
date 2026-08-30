@@ -10,6 +10,7 @@ jest.mock('@/hooks/useDecentraID', () => ({
   useDecentraID: () => ({
     address: null,
     connected: false,
+    loading: false,
     connectWallet: mockConnectWallet,
     disconnectWallet: mockDisconnectWallet,
     chainId: null,
@@ -43,10 +44,11 @@ describe('WalletConnect Component', () => {
     expect(screen.getByText('Connect MetaMask')).toBeInTheDocument()
   })
 
-  it('shows MetaMask fox icon', () => {
+  it('shows Wallet icon', () => {
     render(<WalletConnect />)
     
-    expect(screen.getByText('🦊')).toBeInTheDocument()
+    const svg = document.querySelector('.lucide-wallet')
+    expect(svg).toBeInTheDocument()
   })
 
   it('shows description text', () => {
@@ -66,13 +68,6 @@ describe('WalletConnect Component', () => {
     render(<WalletConnect />)
     
     const button = screen.getByRole('button', { name: 'Connect MetaMask' })
-    expect(button).toHaveClass('btn-primary')
-  })
-
-  it('renders compact variant', () => {
-    render(<WalletConnect variant="compact" />)
-    
-    // When disconnected, compact variant shows the same connect UI
-    expect(screen.getByText('Connect MetaMask')).toBeInTheDocument()
+    expect(button).toHaveClass('bg-primary')
   })
 })

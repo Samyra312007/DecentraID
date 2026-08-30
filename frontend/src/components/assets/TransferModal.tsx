@@ -2,6 +2,10 @@
 
 import { useState } from 'react';
 import type { Asset } from '@/types/did';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface TransferModalProps {
   asset: Asset;
@@ -14,8 +18,6 @@ export function TransferModal({ asset, isOpen, onClose, onTransfer }: TransferMo
   const [toAddress, setToAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,53 +35,47 @@ export function TransferModal({ asset, isOpen, onClose, onTransfer }: TransferMo
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
-      <div className="card w-full max-w-md mx-4 relative z-10">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)]">Transfer Asset</h2>
-          <button onClick={onClose} className="p-1.5 -mr-1.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] hover:bg-white/[0.04] transition-colors">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Transfer Asset</DialogTitle>
+        </DialogHeader>
 
-        <div className="p-4 rounded-lg bg-white/[0.03] mb-5">
-          <p className="text-[12px] text-[var(--color-text-muted)] mb-1">Transferring</p>
-          <p className="text-[14px] font-medium text-[var(--color-text-primary)]">{asset.name}</p>
-          <p className="text-[12px] font-mono text-[var(--color-text-muted)]">Token #{asset.token_id}</p>
+        <div className="p-4 rounded-lg bg-muted mb-4">
+          <p className="text-xs text-muted-foreground mb-1">Transferring</p>
+          <p className="text-sm font-medium text-foreground">{asset.name}</p>
+          <p className="text-xs font-mono text-muted-foreground">Token #{asset.token_id}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Recipient Address</label>
-            <input
-              type="text"
+          <div className="space-y-2">
+            <Label htmlFor="address">Recipient Address</Label>
+            <Input
+              id="address"
               value={toAddress}
               onChange={(e) => setToAddress(e.target.value)}
-              className="input font-mono"
+              className="font-mono"
               placeholder="0x..."
               required
             />
           </div>
 
           {error && (
-            <div className="p-3 rounded-lg text-[13px] bg-[var(--color-danger)]/10 text-[var(--color-danger)]">
+            <div className="p-3 rounded-lg text-sm bg-destructive/10 text-destructive">
               {error}
             </div>
           )}
 
           <div className="flex gap-3 pt-1">
-            <button type="button" onClick={onClose} className="btn-secondary flex-1" disabled={loading}>
+            <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="flex-1">
               Cancel
-            </button>
-            <button type="submit" className="btn-primary flex-1" disabled={loading || !toAddress}>
+            </Button>
+            <Button type="submit" disabled={loading || !toAddress} className="flex-1">
               {loading ? 'Transferring...' : 'Transfer'}
-            </button>
+            </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,6 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 interface PolicyFormProps {
   onSuccess?: () => void;
@@ -45,98 +50,99 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
   };
 
   return (
-    <div className="card">
-      <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-5">Create Access Policy</h2>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Policy Name</label>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="input"
-            placeholder="e.g., Document Access Policy"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Description</label>
-          <textarea
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="input resize-none"
-            rows={2}
-            placeholder="Describe this policy"
-          />
-        </div>
-
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Resource Type</label>
-          <select
-            value={formData.resourceType}
-            onChange={(e) => setFormData({ ...formData, resourceType: e.target.value })}
-            className="input"
-            required
-          >
-            <option value="">Select resource type</option>
-            <option value="did">DID</option>
-            <option value="asset">Asset</option>
-            <option value="document">Document</option>
-            <option value="all">All Resources</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Allowed Actions</label>
-          <div className="flex flex-wrap gap-2">
-            {availableActions.map(action => (
-              <button
-                key={action}
-                type="button"
-                onClick={() => toggleAction(action)}
-                className={`px-3.5 py-1.5 rounded-full text-[13px] font-medium border transition-colors ${
-                  formData.allowedActions.includes(action)
-                    ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
-                    : 'bg-transparent text-[var(--color-text-primary)] border-[var(--color-border-strong)] hover:border-[var(--color-text-muted)]'
-                }`}
-              >
-                {action}
-              </button>
-            ))}
+    <Card>
+      <CardHeader>
+        <CardTitle>Create Access Policy</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="policy-name">Policy Name</Label>
+            <Input
+              id="policy-name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="e.g., Document Access Policy"
+              required
+            />
           </div>
-        </div>
 
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Required Role</label>
-          <select
-            value={formData.requiredRole}
-            onChange={(e) => setFormData({ ...formData, requiredRole: e.target.value })}
-            className="input"
-          >
-            <option value="">No role required</option>
-            <option value="admin">Admin</option>
-            <option value="editor">Editor</option>
-            <option value="viewer">Viewer</option>
-          </select>
-        </div>
-
-        {error && (
-          <div className="p-3 rounded-lg text-[13px] bg-[var(--color-danger)]/10 text-[var(--color-danger)]">
-            {error}
+          <div className="space-y-2">
+            <Label htmlFor="policy-desc">Description</Label>
+            <Textarea
+              id="policy-desc"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={2}
+              placeholder="Describe this policy"
+            />
           </div>
-        )}
 
-        <div className="flex gap-3 pt-2">
-          <button type="button" onClick={onCancel} className="btn-secondary flex-1" disabled={loading}>
-            Cancel
-          </button>
-          <button type="submit" className="btn-primary flex-1" disabled={loading}>
-            {loading ? 'Creating...' : 'Create Policy'}
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="space-y-2">
+            <Label htmlFor="resource-type">Resource Type</Label>
+            <select
+              id="resource-type"
+              value={formData.resourceType}
+              onChange={(e) => setFormData({ ...formData, resourceType: e.target.value })}
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              required
+            >
+              <option value="">Select resource type</option>
+              <option value="did">DID</option>
+              <option value="asset">Asset</option>
+              <option value="document">Document</option>
+              <option value="all">All Resources</option>
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Allowed Actions</Label>
+            <div className="flex flex-wrap gap-2">
+              {availableActions.map(action => (
+                <Button
+                  key={action}
+                  type="button"
+                  variant={formData.allowedActions.includes(action) ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => toggleAction(action)}
+                >
+                  {action}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="required-role">Required Role</Label>
+            <select
+              id="required-role"
+              value={formData.requiredRole}
+              onChange={(e) => setFormData({ ...formData, requiredRole: e.target.value })}
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            >
+              <option value="">No role required</option>
+              <option value="admin">Admin</option>
+              <option value="editor">Editor</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
+
+          {error && (
+            <div className="p-3 rounded-lg text-sm bg-destructive/10 text-destructive">
+              {error}
+            </div>
+          )}
+
+          <div className="flex gap-3 pt-2">
+            <Button type="button" variant="outline" onClick={onCancel} disabled={loading} className="flex-1">
+              Cancel
+            </Button>
+            <Button type="submit" disabled={loading} className="flex-1">
+              {loading ? 'Creating...' : 'Create Policy'}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

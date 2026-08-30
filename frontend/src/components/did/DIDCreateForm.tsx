@@ -3,6 +3,11 @@
 import { useState } from 'react';
 import { useDecentraID } from '@/hooks/useDecentraID';
 import type { DIDCreateRequest } from '@/types/did';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 interface DIDCreateFormProps {
   onSuccess?: () => void;
@@ -61,66 +66,70 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
 
   if (!connected) {
     return (
-      <div className="card text-center py-8">
-        <p className="text-[13px] text-[var(--color-text-muted)]">Please connect your wallet to create a DID</p>
-      </div>
+      <Card>
+        <CardContent className="text-center py-8">
+          <p className="text-sm text-muted-foreground">Please connect your wallet to create a DID</p>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="card">
-      <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-5">Create New DID</h2>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Name</label>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="input"
-            placeholder="My DID"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Description</label>
-          <textarea
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="input resize-none"
-            rows={3}
-            placeholder="Optional description for your DID"
-          />
-        </div>
-
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Service Endpoint</label>
-          <input
-            type="url"
-            value={formData.serviceEndpoint}
-            onChange={(e) => setFormData({ ...formData, serviceEndpoint: e.target.value })}
-            className="input"
-            placeholder="https://example.com/service"
-          />
-        </div>
-
-        {error && (
-          <div className="p-3 rounded-lg text-[13px] bg-[var(--color-danger)]/10 text-[var(--color-danger)]">
-            {error}
+    <Card>
+      <CardHeader>
+        <CardTitle>Create New DID</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="My DID"
+              required
+            />
           </div>
-        )}
 
-        <div className="flex gap-3 pt-2">
-          <button type="button" onClick={onCancel} className="btn-secondary flex-1" disabled={loading}>
-            Cancel
-          </button>
-          <button type="submit" className="btn-primary flex-1" disabled={loading}>
-            {loading ? 'Creating...' : 'Create DID'}
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={3}
+              placeholder="Optional description for your DID"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="endpoint">Service Endpoint</Label>
+            <Input
+              id="endpoint"
+              type="url"
+              value={formData.serviceEndpoint}
+              onChange={(e) => setFormData({ ...formData, serviceEndpoint: e.target.value })}
+              placeholder="https://example.com/service"
+            />
+          </div>
+
+          {error && (
+            <div className="p-3 rounded-lg text-sm bg-destructive/10 text-destructive">
+              {error}
+            </div>
+          )}
+
+          <div className="flex gap-3 pt-2">
+            <Button type="button" variant="outline" onClick={onCancel} disabled={loading} className="flex-1">
+              Cancel
+            </Button>
+            <Button type="submit" disabled={loading} className="flex-1">
+              {loading ? 'Creating...' : 'Create DID'}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

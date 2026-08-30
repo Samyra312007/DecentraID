@@ -2,6 +2,12 @@
 
 import { WalletConnect } from '@/components/common/WalletConnect';
 import { useDecentraID } from '@/hooks/useDecentraID';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import Link from 'next/link';
 
 export default function SettingsPage() {
   const { connected, chainId } = useDecentraID();
@@ -9,95 +15,114 @@ export default function SettingsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Settings</h1>
-        <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Configure your DecentraID preferences</p>
+        <h1 className="text-2xl font-semibold text-foreground">Settings</h1>
+        <p className="text-sm text-muted-foreground mt-1">Configure your DecentraID preferences</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 space-y-5">
-          <div className="card">
-            <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-4">Wallet Connection</h2>
-            <WalletConnect />
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Wallet Connection</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <WalletConnect />
+            </CardContent>
+          </Card>
 
-          <div className="card">
-            <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-4">Network Settings</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Network</label>
-                <select className="input">
+          <Card>
+            <CardHeader>
+              <CardTitle>Network Settings</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="network">Network</Label>
+                <select
+                  id="network"
+                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                >
                   <option value="amoy">Polygon Amoy (Testnet)</option>
                   <option value="mainnet">Polygon Mainnet</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">API Endpoint</label>
-                <input type="text" defaultValue="http://localhost:8000" className="input" placeholder="API endpoint URL" />
+              <div className="space-y-2">
+                <Label htmlFor="api-endpoint">API Endpoint</Label>
+                <Input id="api-endpoint" defaultValue="http://localhost:8000" placeholder="API endpoint URL" />
               </div>
-              <div>
-                <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">IPFS Gateway</label>
-                <input type="text" defaultValue="https://ipfs.io" className="input" placeholder="IPFS gateway URL" />
+              <div className="space-y-2">
+                <Label htmlFor="ipfs-gateway">IPFS Gateway</Label>
+                <Input id="ipfs-gateway" defaultValue="https://ipfs.io" placeholder="IPFS gateway URL" />
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
-          <div className="card">
-            <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-4">Notifications</h2>
-            <div className="space-y-0">
-              {[
-                { label: 'Email notifications', description: 'Receive email alerts for important events' },
-                { label: 'Push notifications', description: 'Browser push notifications for real-time alerts' },
-                { label: 'Access request alerts', description: 'Get notified when someone requests access' },
-                { label: 'Anomaly alerts', description: 'Receive alerts for suspicious activity' },
-              ].map((item) => (
-                <div key={item.label} className="flex items-center justify-between py-3 border-b border-[var(--color-border)] last:border-0">
-                  <div>
-                    <p className="text-[13px] font-medium text-[var(--color-text-primary)]">{item.label}</p>
-                    <p className="text-[12px] text-[var(--color-text-muted)]">{item.description}</p>
+          <Card>
+            <CardHeader>
+              <CardTitle>Notifications</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-0">
+                {[
+                  { label: 'Email notifications', description: 'Receive email alerts for important events' },
+                  { label: 'Push notifications', description: 'Browser push notifications for real-time alerts' },
+                  { label: 'Access request alerts', description: 'Get notified when someone requests access' },
+                  { label: 'Anomaly alerts', description: 'Receive alerts for suspicious activity' },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center justify-between py-3 border-b border-border last:border-0">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{item.label}</p>
+                      <p className="text-xs text-muted-foreground">{item.description}</p>
+                    </div>
+                    <Switch />
                   </div>
-                  <button className="relative w-10 h-[22px] rounded-full bg-white/[0.08] transition-colors">
-                    <div className="absolute top-[3px] left-[3px] w-4 h-4 rounded-full bg-white/40 transition-transform" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="space-y-5">
-          <div className="card">
-            <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-4">About</h2>
-            <div className="space-y-0">
-              <div className="flex justify-between py-2.5 border-b border-[var(--color-border)]">
-                <span className="text-[13px] text-[var(--color-text-muted)]">Version</span>
-                <span className="text-[13px] text-[var(--color-text-primary)]">1.0.0</span>
+          <Card>
+            <CardHeader>
+              <CardTitle>About</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-0">
+                <div className="flex justify-between py-2.5 border-b border-border">
+                  <span className="text-sm text-muted-foreground">Version</span>
+                  <span className="text-sm text-foreground">1.0.0</span>
+                </div>
+                <div className="flex justify-between py-2.5 border-b border-border">
+                  <span className="text-sm text-muted-foreground">Chain ID</span>
+                  <span className="text-sm font-mono text-foreground">{chainId || 'N/A'}</span>
+                </div>
+                <div className="flex justify-between py-2.5">
+                  <span className="text-sm text-muted-foreground">Status</span>
+                  <Badge variant="default">Connected</Badge>
+                </div>
               </div>
-              <div className="flex justify-between py-2.5 border-b border-[var(--color-border)]">
-                <span className="text-[13px] text-[var(--color-text-muted)]">Chain ID</span>
-                <span className="text-[13px] font-mono text-[var(--color-text-primary)]">{chainId || 'N/A'}</span>
-              </div>
-              <div className="flex justify-between py-2.5">
-                <span className="text-[13px] text-[var(--color-text-muted)]">Status</span>
-                <span className="badge badge-success">Connected</span>
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
-          <div className="card">
-            <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-4">Quick Links</h2>
-            <div className="space-y-0">
-              {[
-                { label: 'Dashboard', href: '/dashboard' },
-                { label: 'Manage DIDs', href: '/did' },
-                { label: 'View Assets', href: '/assets' },
-                { label: 'Anomaly Dashboard', href: '/anomaly' },
-              ].map((link) => (
-                <a key={link.href} href={link.href} className="block text-[13px] py-2 text-[var(--color-primary)] hover:text-[var(--color-primary)]/80 transition-colors">
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Links</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-0">
+                {[
+                  { label: 'Dashboard', href: '/dashboard' },
+                  { label: 'Manage DIDs', href: '/did' },
+                  { label: 'View Assets', href: '/assets' },
+                  { label: 'Anomaly Dashboard', href: '/anomaly' },
+                ].map((link) => (
+                  <Link key={link.href} href={link.href} className="block text-sm py-2 text-primary hover:text-primary/80 transition-colors">
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

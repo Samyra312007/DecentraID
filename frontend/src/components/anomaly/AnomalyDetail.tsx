@@ -3,6 +3,7 @@
 import { RiskGauge } from './RiskGauge';
 import { AlertList } from './AlertList';
 import { BehaviorChart } from './BehaviorChart';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface AnomalyDetailProps {
   score: number;
@@ -37,30 +38,38 @@ export function AnomalyDetail({ score, alerts, behaviorData, onAcknowledgeAlert 
       <AlertList alerts={alerts} onAcknowledge={onAcknowledgeAlert} />
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="card text-center py-4">
-          <div className="text-[20px] font-bold text-[var(--color-text-primary)]">
-            {alerts.filter(a => a.severity === 'critical').length}
-          </div>
-          <div className="text-[12px] text-[var(--color-text-muted)]">Critical Alerts</div>
-        </div>
-        <div className="card text-center py-4">
-          <div className="text-[20px] font-bold text-[var(--color-text-primary)]">
-            {alerts.filter(a => a.severity === 'high').length}
-          </div>
-          <div className="text-[12px] text-[var(--color-text-muted)]">High Alerts</div>
-        </div>
-        <div className="card text-center py-4">
-          <div className="text-[20px] font-bold text-[var(--color-text-primary)]">
-            {alerts.filter(a => !a.acknowledged).length}
-          </div>
-          <div className="text-[12px] text-[var(--color-text-muted)]">Unacknowledged</div>
-        </div>
-        <div className="card text-center py-4">
-          <div className="text-[20px] font-bold text-[var(--color-success)]">
-            {alerts.filter(a => a.acknowledged).length}
-          </div>
-          <div className="text-[12px] text-[var(--color-text-muted)]">Resolved</div>
-        </div>
+        <Card>
+          <CardContent className="text-center py-4">
+            <div className="text-xl font-bold text-foreground">
+              {alerts.filter(a => a.severity === 'critical').length}
+            </div>
+            <div className="text-xs text-muted-foreground">Critical Alerts</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="text-center py-4">
+            <div className="text-xl font-bold text-foreground">
+              {alerts.filter(a => a.severity === 'high').length}
+            </div>
+            <div className="text-xs text-muted-foreground">High Alerts</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="text-center py-4">
+            <div className="text-xl font-bold text-foreground">
+              {alerts.filter(a => !a.acknowledged).length}
+            </div>
+            <div className="text-xs text-muted-foreground">Unacknowledged</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="text-center py-4">
+            <div className="text-xl font-bold text-success">
+              {alerts.filter(a => a.acknowledged).length}
+            </div>
+            <div className="text-xs text-muted-foreground">Resolved</div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

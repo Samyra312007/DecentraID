@@ -1,6 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 
 interface Role {
   id: string;
@@ -28,52 +32,51 @@ export function RoleManager() {
   };
 
   return (
-    <div className="card">
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)]">Role Management</h2>
-        <button onClick={() => setShowCreate(!showCreate)} className="btn-primary text-[13px]">
-          {showCreate ? 'Cancel' : '+ Add Role'}
-        </button>
-      </div>
-
-      {showCreate && (
-        <div className="p-4 rounded-lg bg-white/[0.04] mb-4 space-y-3">
-          <input
-            type="text"
-            value={newRole.name}
-            onChange={(e) => setNewRole({ ...newRole, name: e.target.value })}
-            className="input"
-            placeholder="Role name"
-          />
-          <input
-            type="text"
-            value={newRole.description}
-            onChange={(e) => setNewRole({ ...newRole, description: e.target.value })}
-            className="input"
-            placeholder="Description"
-          />
-          <button onClick={handleCreateRole} className="btn-primary w-full">Create Role</button>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle>Role Management</CardTitle>
+          <Button size="sm" onClick={() => setShowCreate(!showCreate)}>
+            {showCreate ? 'Cancel' : '+ Add Role'}
+          </Button>
         </div>
-      )}
-
-      <div className="space-y-3">
-        {roles.map(role => (
-          <div key={role.id} className="p-4 rounded-lg border border-[var(--color-border)]">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-[14px] font-semibold text-[var(--color-text-primary)]">{role.name}</h3>
-              <span className="badge badge-neutral">{role.members.length} members</span>
-            </div>
-            <p className="text-[13px] text-[var(--color-text-muted)] mb-3">{role.description}</p>
-            <div className="flex flex-wrap gap-2">
-              {role.members.map((member, idx) => (
-                <span key={idx} className="text-[12px] font-mono px-2 py-1 rounded bg-white/[0.06] text-[var(--color-text-muted)]">
-                  {member}
-                </span>
-              ))}
-            </div>
+      </CardHeader>
+      <CardContent>
+        {showCreate && (
+          <div className="p-4 rounded-lg bg-muted mb-4 space-y-3">
+            <Input
+              value={newRole.name}
+              onChange={(e) => setNewRole({ ...newRole, name: e.target.value })}
+              placeholder="Role name"
+            />
+            <Input
+              value={newRole.description}
+              onChange={(e) => setNewRole({ ...newRole, description: e.target.value })}
+              placeholder="Description"
+            />
+            <Button onClick={handleCreateRole} className="w-full">Create Role</Button>
           </div>
-        ))}
-      </div>
-    </div>
+        )}
+
+        <div className="space-y-3">
+          {roles.map(role => (
+            <div key={role.id} className="p-4 rounded-lg border border-border">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-semibold text-foreground">{role.name}</h3>
+                <Badge variant="secondary">{role.members.length} members</Badge>
+              </div>
+              <p className="text-sm text-muted-foreground mb-3">{role.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {role.members.map((member, idx) => (
+                  <Badge key={idx} variant="outline" className="font-mono text-xs">
+                    {member}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

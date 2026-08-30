@@ -1,101 +1,112 @@
 'use client';
 
 import type { DIDDocument } from '@/types/did';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 interface DIDDetailProps {
   did: DIDDocument;
   onBack?: () => void;
 }
 
-const statusStyles = {
-  active: 'badge-success',
-  suspended: 'badge-warning',
-  deactivated: 'badge-danger',
+const statusVariant = {
+  active: 'default' as const,
+  suspended: 'secondary' as const,
+  deactivated: 'destructive' as const,
 };
 
 export function DIDDetail({ did, onBack }: DIDDetailProps) {
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-5">
       <div className="flex items-center gap-4">
-        <button
-          onClick={onBack}
-          className="p-2 -ml-2 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] hover:bg-white/[0.04] transition-colors"
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+        <Button variant="ghost" size="icon" onClick={onBack}>
+          <ArrowLeft className="w-4 h-4" />
+        </Button>
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-semibold text-[var(--color-text-primary)] truncate">{did.name || 'DID Details'}</h1>
-          <p className="text-[13px] font-mono text-[var(--color-text-muted)] mt-0.5 truncate">{did.did}</p>
+          <h1 className="text-lg font-semibold text-foreground truncate">{did.name || 'DID Details'}</h1>
+          <p className="text-xs font-mono text-muted-foreground mt-0.5 truncate">{did.did}</p>
         </div>
-        <span className={`badge ${statusStyles[did.status] || 'badge-neutral'}`}>
+        <Badge variant={statusVariant[did.status] || 'secondary'}>
           {did.status}
-        </span>
+        </Badge>
       </div>
 
-      {/* Main Info */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="card">
-          <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-4">Basic Information</h2>
-          <div className="space-y-0">
-            <div className="flex justify-between py-3 border-b border-[var(--color-border)]">
-              <span className="text-[13px] text-[var(--color-text-muted)]">Controller</span>
-              <span className="text-[13px] font-mono text-[var(--color-text-primary)]">{did.controller}</span>
-            </div>
-            <div className="flex justify-between py-3 border-b border-[var(--color-border)]">
-              <span className="text-[13px] text-[var(--color-text-muted)]">Created</span>
-              <span className="text-[13px] text-[var(--color-text-primary)]">{new Date(did.created_at).toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between py-3">
-              <span className="text-[13px] text-[var(--color-text-muted)]">Updated</span>
-              <span className="text-[13px] text-[var(--color-text-primary)]">{new Date(did.updated_at).toLocaleString()}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="card">
-          <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-4">Verification Methods</h2>
-          <div className="space-y-2">
-            {did.verification_methods.map((method, index) => (
-              <div key={index} className="p-3 rounded-lg bg-white/[0.03]">
-                <p className="text-[13px] font-mono text-[var(--color-text-primary)]">{method}</p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Basic Information</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-0">
+              <div className="flex justify-between py-3 border-b border-border">
+                <span className="text-sm text-muted-foreground">Controller</span>
+                <span className="text-sm font-mono text-foreground">{did.controller}</span>
               </div>
-            ))}
-          </div>
-        </div>
+              <div className="flex justify-between py-3 border-b border-border">
+                <span className="text-sm text-muted-foreground">Created</span>
+                <span className="text-sm text-foreground">{new Date(did.created_at).toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between py-3">
+                <span className="text-sm text-muted-foreground">Updated</span>
+                <span className="text-sm text-foreground">{new Date(did.updated_at).toLocaleString()}</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Verification Methods</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {did.verification_methods.map((method, index) => (
+                <div key={index} className="p-3 rounded-lg bg-muted">
+                  <p className="text-sm font-mono text-foreground">{method}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Services */}
       {did.services && did.services.length > 0 && (
-        <div className="card">
-          <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-4">Services</h2>
-          <div className="space-y-3">
-            {did.services.map((service, index) => (
-              <div key={index} className="p-4 rounded-lg border border-[var(--color-border)]">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[14px] font-medium text-[var(--color-text-primary)]">{service.id}</span>
-                  <span className="badge badge-neutral">{service.type}</span>
+        <Card>
+          <CardHeader>
+            <CardTitle>Services</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {did.services.map((service, index) => (
+                <div key={index} className="p-4 rounded-lg border border-border">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-foreground">{service.id}</span>
+                    <Badge variant="outline">{service.type}</Badge>
+                  </div>
+                  <p className="text-xs font-mono text-muted-foreground">{service.serviceEndpoint}</p>
                 </div>
-                <p className="text-[13px] font-mono text-[var(--color-text-muted)]">{service.serviceEndpoint}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       )}
 
-      {/* Actions */}
-      <div className="card">
-        <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-4">Actions</h2>
-        <div className="flex flex-wrap gap-3">
-          <button className="btn-secondary">Update DID</button>
-          <button className="btn-secondary">Add Service</button>
-          {did.status === 'active' && (
-            <button className="btn-secondary text-[var(--color-warning)]">Suspend DID</button>
-          )}
-        </div>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Actions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-3">
+            <Button variant="outline">Update DID</Button>
+            <Button variant="outline">Add Service</Button>
+            {did.status === 'active' && (
+              <Button variant="destructive">Suspend DID</Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

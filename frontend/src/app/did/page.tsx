@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import { DIDCard } from '@/components/did/DIDCard';
 import { DIDCreateForm } from '@/components/did/DIDCreateForm';
 import { DIDDetail } from '@/components/did/DIDDetail';
 import { WalletConnect } from '@/components/common/WalletConnect';
 import { useDecentraID } from '@/hooks/useDecentraID';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 import type { DIDDocument } from '@/types/did';
 
 const mockDIDs: DIDDocument[] = [
@@ -42,8 +43,8 @@ export default function DIDPage() {
     return (
       <div className="space-y-5">
         <div>
-          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Decentralized Identifiers</h1>
-          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Manage your DIDs on Polygon blockchain</p>
+          <h1 className="text-2xl font-semibold text-foreground">Decentralized Identifiers</h1>
+          <p className="text-sm text-muted-foreground mt-1">Manage your DIDs on Polygon blockchain</p>
         </div>
         <div className="max-w-md"><WalletConnect /></div>
       </div>
@@ -54,8 +55,8 @@ export default function DIDPage() {
     return (
       <div className="space-y-5">
         <div>
-          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Create New DID</h1>
-          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Set up a new decentralized identity</p>
+          <h1 className="text-2xl font-semibold text-foreground">Create New DID</h1>
+          <p className="text-sm text-muted-foreground mt-1">Set up a new decentralized identity</p>
         </div>
         <div className="max-w-2xl"><DIDCreateForm onSuccess={() => setView('list')} onCancel={() => setView('list')} /></div>
       </div>
@@ -74,10 +75,10 @@ export default function DIDPage() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Decentralized Identifiers</h1>
-          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Manage your DIDs on Polygon blockchain</p>
+          <h1 className="text-2xl font-semibold text-foreground">Decentralized Identifiers</h1>
+          <p className="text-sm text-muted-foreground mt-1">Manage your DIDs on Polygon blockchain</p>
         </div>
-        <button onClick={() => setView('create')} className="btn-primary">+ Create DID</button>
+        <Button onClick={() => setView('create')}>+ Create DID</Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

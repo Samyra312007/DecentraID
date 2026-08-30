@@ -26,8 +26,8 @@ export default function AnomalyPage() {
     return (
       <div className="space-y-5">
         <div>
-          <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Anomaly Detection</h1>
-          <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Monitor and analyze suspicious activity</p>
+          <h1 className="text-2xl font-semibold text-foreground">Anomaly Detection</h1>
+          <p className="text-sm text-muted-foreground mt-1">Monitor and analyze suspicious activity</p>
         </div>
         <div className="max-w-md"><WalletConnect /></div>
       </div>
@@ -37,8 +37,8 @@ export default function AnomalyPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-[24px] font-semibold text-[var(--color-text-primary)]">Anomaly Detection</h1>
-        <p className="text-[14px] text-[var(--color-text-muted)] mt-1">Monitor and analyze suspicious activity</p>
+        <h1 className="text-2xl font-semibold text-foreground">Anomaly Detection</h1>
+        <p className="text-sm text-muted-foreground mt-1">Monitor and analyze suspicious activity</p>
       </div>
 
       <AnomalyDetail

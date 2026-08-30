@@ -67,7 +67,7 @@ describe('DIDCard Component', () => {
     const onSelect = jest.fn()
     render(<DIDCard did={mockDID} onSelect={onSelect} />)
 
-    const card = document.querySelector('.card')!
+    const card = document.querySelector('[data-slot="card"]')!
     fireEvent.click(card)
 
     expect(onSelect).toHaveBeenCalledWith(mockDID)

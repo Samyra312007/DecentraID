@@ -3,6 +3,12 @@
 import { useState } from 'react';
 import { useDecentraID } from '@/hooks/useDecentraID';
 import type { AssetMintRequest } from '@/types/did';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Upload } from 'lucide-react';
 
 interface MintFormProps {
   onSuccess?: () => void;
@@ -32,10 +38,7 @@ export function MintForm({ onSuccess, onCancel }: MintFormProps) {
         name: formData.name,
         description: formData.description,
         asset_type: formData.assetType,
-        metadata: {
-          description: formData.description,
-          image: '',
-        },
+        metadata: { description: formData.description, image: '' },
         issuer_address: address,
         owner_address: address,
       };
@@ -51,96 +54,97 @@ export function MintForm({ onSuccess, onCancel }: MintFormProps) {
 
   if (!connected) {
     return (
-      <div className="card text-center py-8">
-        <p className="text-[13px] text-[var(--color-text-muted)]">Please connect your wallet to mint assets</p>
-      </div>
+      <Card>
+        <CardContent className="text-center py-8">
+          <p className="text-sm text-muted-foreground">Please connect your wallet to mint assets</p>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="card">
-      <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-5">Mint New Asset</h2>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Name</label>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="input"
-            placeholder="Asset name"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Description</label>
-          <textarea
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="input resize-none"
-            rows={3}
-            placeholder="Describe your asset"
-          />
-        </div>
-
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">Asset Type</label>
-          <select
-            value={formData.assetType}
-            onChange={(e) => setFormData({ ...formData, assetType: e.target.value })}
-            className="input"
-          >
-            <option value="credential">Credential</option>
-            <option value="certificate">Certificate</option>
-            <option value="license">License</option>
-            <option value="document">Document</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-[13px] font-medium text-[var(--color-text-primary)] mb-1.5">File (Optional)</label>
-          <div
-            className="border border-dashed border-[var(--color-border-strong)] rounded-lg p-8 text-center cursor-pointer hover:border-[var(--color-primary)] transition-colors"
-            onClick={() => document.getElementById('file-input')?.click()}
-          >
-            <input
-              id="file-input"
-              type="file"
-              className="hidden"
-              onChange={(e) => setFormData({ ...formData, file: e.target.files?.[0] || null })}
+    <Card>
+      <CardHeader>
+        <CardTitle>Mint New Asset</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Asset name"
+              required
             />
-            {formData.file ? (
-              <p className="text-[13px] text-[var(--color-text-primary)]">{formData.file.name}</p>
-            ) : (
-              <>
-                <svg className="w-8 h-8 mx-auto mb-2 text-[var(--color-text-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                  <path d="M17 8l-5-5-5 5" />
-                  <path d="M12 3v12" />
-                </svg>
-                <p className="text-[13px] text-[var(--color-text-muted)]">Click to upload or drag and drop</p>
-              </>
-            )}
           </div>
-        </div>
 
-        {error && (
-          <div className="p-3 rounded-lg text-[13px] bg-[var(--color-danger)]/10 text-[var(--color-danger)]">
-            {error}
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={3}
+              placeholder="Describe your asset"
+            />
           </div>
-        )}
 
-        <div className="flex gap-3 pt-2">
-          <button type="button" onClick={onCancel} className="btn-secondary flex-1" disabled={loading}>
-            Cancel
-          </button>
-          <button type="submit" className="btn-primary flex-1" disabled={loading}>
-            {loading ? 'Minting...' : 'Mint Asset'}
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="space-y-2">
+            <Label htmlFor="type">Asset Type</Label>
+            <select
+              id="type"
+              value={formData.assetType}
+              onChange={(e) => setFormData({ ...formData, assetType: e.target.value })}
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            >
+              <option value="credential">Credential</option>
+              <option value="certificate">Certificate</option>
+              <option value="license">License</option>
+              <option value="document">Document</option>
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>File (Optional)</Label>
+            <div
+              className="border border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
+              onClick={() => document.getElementById('file-input')?.click()}
+            >
+              <input
+                id="file-input"
+                type="file"
+                className="hidden"
+                onChange={(e) => setFormData({ ...formData, file: e.target.files?.[0] || null })}
+              />
+              {formData.file ? (
+                <p className="text-sm text-foreground">{formData.file.name}</p>
+              ) : (
+                <>
+                  <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                  <p className="text-sm text-muted-foreground">Click to upload or drag and drop</p>
+                </>
+              )}
+            </div>
+          </div>
+
+          {error && (
+            <div className="p-3 rounded-lg text-sm bg-destructive/10 text-destructive">
+              {error}
+            </div>
+          )}
+
+          <div className="flex gap-3 pt-2">
+            <Button type="button" variant="outline" onClick={onCancel} disabled={loading} className="flex-1">
+              Cancel
+            </Button>
+            <Button type="submit" disabled={loading} className="flex-1">
+              {loading ? 'Minting...' : 'Mint Asset'}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
