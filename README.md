@@ -105,32 +105,41 @@ DecentraID is a blockchain-based platform where users own their identity (DID), 
 
 ## Architecture
 
-```
-+-----------------------------------------------------------+
-|                  Presentation Layer                        |
-|          Next.js 14  |  React 18  |  Tailwind CSS          |
-+-----------------------------------------------------------+
-|                     API Gateway                            |
-|              Python FastAPI  |  JWT Auth  |  WebSocket     |
-+-----------------------------------------------------------+
-|                  Smart Contract Layer                      |
-|   Identity  |  Access Control (RBAC/ABAC)  |  NFT Assets   |
-|              Solidity 0.8.28  |  OpenZeppelin 5.x          |
-+-----------------------------------------------------------+
-|                    Blockchain Layer                        |
-|           Polygon L2 (Amoy Testnet)                        |
-|           65,000 TPS  |  < Rs 1 per transaction            |
-+-----------------------------------------------------------+
-|                    AI/ML Layer                             |
-|       Anomaly Detection  |  Behavioral Profiling           |
-|              TensorFlow  |  scikit-learn                   |
-+-----------------------------------------------------------+
-|                      Data Layer                            |
-|         PostgreSQL  |  Redis  |  IPFS                      |
-+-----------------------------------------------------------+
+```mermaid
+flowchart TB
+    subgraph Pres["Presentation Layer"]
+        FE["Next.js 14 · React 18 · Tailwind CSS"]
+    end
+    subgraph GW["API Gateway"]
+        API["Python FastAPI · JWT Auth · WebSocket"]
+    end
+    subgraph SCL["Smart Contract Layer"]
+        SC["Identity · Access Control RBAC/ABAC · NFT Assets<br/>Solidity 0.8.28 · OpenZeppelin 5.x"]
+    end
+    subgraph BL["Blockchain Layer"]
+        CH["Polygon L2 — Amoy Testnet<br/>65,000 TPS · under Rs 1 per transaction"]
+    end
+    subgraph AIL["AI/ML Layer"]
+        ML["Anomaly Detection · Behavioral Profiling<br/>TensorFlow · scikit-learn"]
+    end
+    subgraph DL["Data Layer"]
+        DB["PostgreSQL · Redis · IPFS"]
+    end
+
+    Pres --> GW
+    GW --> SCL
+    GW --> AIL
+    GW --> DL
+    SCL --> BL
+    AIL --> DL
 ```
 
 ### End-to-End Workflow
+
+```mermaid
+flowchart LR
+    A["Step 1 — Identity Creation<br/>DID and keypair on-chain"] --> B["Step 2 — Organization Onboarding<br/>roles and policies as smart contracts"] --> C["Step 3 — Asset Tokenization<br/>documents minted as NFTs"] --> D["Step 4 — Access Request<br/>on-chain policy check"] --> E["Step 5 — Monitoring and Audit<br/>AI/ML + immutable audit trail"]
+```
 
 **Step 1 -- Identity Creation:**  
 User generates DID and cryptographic key pair. DID is stored on blockchain (example: `did:decentraid:0x...`). User controls their own private key.
@@ -146,6 +155,167 @@ User requests access to a resource. System verifies DID and checks smart contrac
 
 **Step 5 -- Monitoring and Audit:**  
 AI/ML monitors access patterns. Detects anomalies such as unusual time, location, or behavior. Alerts generated. Immutable audit trail maintained on blockchain.
+
+### Data Flow Diagrams
+
+#### DID Creation Flow
+
+```mermaid
+sequenceDiagram
+    actor U as User
+    participant FE as Frontend
+    participant BE as Backend (FastAPI)
+    participant SC as Identity Contract
+    participant DB as PostgreSQL
+    participant WS as WebSocket
+
+    U->>FE: Connect MetaMask wallet
+    FE->>BE: POST /api/v1/did/create
+    BE->>SC: createDID(publicKeyHash, metadataHash)
+    SC-->>BE: DIDCreated event + tx hash
+    BE->>DB: Store DID document off-chain
+    BE-->>WS: Broadcast did.created event
+    WS-->>FE: Real-time update
+    FE-->>U: DID created (did:decentraid:0x...)
+```
+
+#### Access Request Flow
+
+```mermaid
+sequenceDiagram
+    actor U as User
+    actor M as Manager
+    participant FE as Frontend
+    participant BE as Backend (FastAPI)
+    participant ML as Anomaly Service
+    participant SC as AccessControl Contract
+    participant WS as WebSocket
+
+    U->>FE: Request access to resource
+    FE->>BE: POST /api/v1/access/request
+    BE->>SC: requestAccess(resourceId, action, reason)
+    BE->>ML: POST /detect (event features)
+    ML-->>BE: Risk score
+    BE-->>WS: Notify managers
+    WS-->>M: Approval requested
+    alt approved
+        M->>BE: POST /api/v1/access/decide (approve)
+        BE->>SC: decideAccess(requestId, true)
+    else denied
+        M->>BE: POST /api/v1/access/decide (deny)
+        BE->>SC: decideAccess(requestId, false)
+    end
+    SC-->>BE: AccessDecided event
+    BE->>BE: Write immutable audit log
+    BE-->>WS: Broadcast access.decided
+    WS-->>U: Access granted or denied
+```
+
+#### Asset Minting and Verification Flow
+
+```mermaid
+sequenceDiagram
+    actor U as User
+    participant FE as Frontend
+    participant BE as Backend (FastAPI)
+    participant IP as IPFS
+    participant SC as Assets Contract
+    participant DB as PostgreSQL
+
+    U->>FE: Mint asset with document
+    FE->>BE: POST /api/v1/ipfs/upload
+    BE->>IP: Pin document
+    IP-->>BE: CID + content hash
+    BE->>SC: mintAsset(to, assetType, ipfsHash, documentHash)
+    SC-->>BE: AssetMinted event + tokenId
+    BE->>DB: Store asset metadata off-chain
+    BE-->>FE: Asset minted
+    U->>FE: Verify asset later
+    FE->>BE: GET /api/v1/asset/tokenId/verify
+    BE->>SC: verifyAsset(tokenId)
+    SC-->>BE: valid + owner
+    BE-->>FE: Verification result
+```
+
+### Off-Chain Data Model (ERD)
+
+The PostgreSQL schema mirrors the on-chain state. DID documents, assets, alerts, and access logs each reference the decentralized identifier, so any record can be traced back to its on-chain transaction via `tx_hash`.
+
+```mermaid
+erDiagram
+    DID_DOCUMENTS ||--o{ ASSETS : "issued and owned"
+    DID_DOCUMENTS ||--o{ ORG_MEMBERS : "belongs to"
+    ORGANIZATIONS ||--o{ ORG_MEMBERS : "has"
+    DID_DOCUMENTS |o--o{ ORGANIZATIONS : "administers"
+    DID_DOCUMENTS ||--o{ ANOMALY_ALERTS : "triggers"
+    DID_DOCUMENTS ||--o{ ACCESS_LOGS : "records"
+    DID_DOCUMENTS ||--|| BEHAVIOR_PROFILES : "profiles"
+
+    DID_DOCUMENTS {
+        uuid id PK
+        string did UK
+        string address UK
+        text public_key
+        jsonb metadata
+        string status
+        string tx_hash
+    }
+    ASSETS {
+        uuid id PK
+        int token_id
+        string issuer_did FK
+        string owner_did FK
+        string asset_type
+        string ipfs_hash
+        string document_hash
+        string status
+    }
+    ORGANIZATIONS {
+        uuid id PK
+        string name
+        string admin_did FK
+    }
+    ORG_MEMBERS {
+        uuid id PK
+        uuid org_id FK
+        string did FK
+    }
+    POLICIES {
+        uuid id PK
+        string policy_id UK
+        string resource_type
+        string action
+        jsonb allowed_roles
+        jsonb conditions
+        datetime valid_until
+        boolean active
+    }
+    ANOMALY_ALERTS {
+        uuid id PK
+        string user_did
+        float risk_score
+        string anomaly_type
+        string severity
+        boolean acknowledged
+    }
+    ACCESS_LOGS {
+        uuid id PK
+        string did
+        string resource_id
+        string action
+        boolean granted
+        string tx_hash
+        datetime timestamp
+    }
+    BEHAVIOR_PROFILES {
+        uuid id PK
+        string user_did UK
+        float_array feature_vector
+        float_array baseline_mean
+        float_array baseline_std
+        int sample_count
+    }
+```
 
 ---
 
@@ -491,6 +661,29 @@ An ERC-721 NFT contract for digital assets. Each asset is minted with metadata l
 - `revokeAsset(tokenId, reason)` -- Revoke an asset (admin only)
 - `verifyAsset(tokenId)` -- Check if an asset is valid, active, and not expired
 
+### DID Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Active: createDID()
+    Active --> Suspended: suspendDID() by admin
+    Suspended --> Active: reactivateDID()
+    Active --> Deactivated: deactivateDID()
+    Deactivated --> [*]
+```
+
+### Asset Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Active: mintAsset()
+    Active --> Transferred: transferAsset()
+    Transferred --> Transferred: transferAsset()
+    Active --> Revoked: revokeAsset() by admin
+    Transferred --> Revoked: revokeAsset() by admin
+    Revoked --> [*]
+```
+
 ### Contract Testing
 
 ```bash
@@ -629,6 +822,22 @@ The anomaly detection system uses an **ensemble approach** combining two complem
 1. **Autoencoder** -- A neural network trained on normal behavior data. Detects anomalies by measuring reconstruction error. High reconstruction error means the input pattern deviates from normal.
 
 2. **Isolation Forest** -- A statistical algorithm that isolates outliers by randomly partitioning feature space. Anomalies are isolated in fewer partitions, giving them shorter path lengths.
+
+### Detection Pipeline
+
+```mermaid
+flowchart TD
+    A["Access event received"] --> B["Feature extraction<br/>15 dimensions"]
+    B --> C["Behavioral profile lookup<br/>EMA baselines"]
+    C --> D["Autoencoder<br/>reconstruction error"]
+    C --> E["Isolation Forest<br/>anomaly score"]
+    D --> F["Ensemble score<br/>0.6 x AE + 0.4 x IF"]
+    E --> F
+    F --> G{"Score above threshold?"}
+    G -- "No" --> H["Log event, no alert"]
+    G -- "Yes" --> I["Create alert<br/>severity by score band"]
+    I --> J["WebSocket broadcast<br/>to anomaly dashboard"]
+```
 
 ### 15 Feature Dimensions
 
@@ -815,6 +1024,31 @@ docker compose down                 # Stop all services
 ```bash
 cd contracts
 npx hardhat run scripts/deploy-all.js --network amoy
+```
+
+### Service Topology (Docker Compose)
+
+```mermaid
+flowchart LR
+    subgraph Stack["docker compose stack"]
+        NGX["Nginx :80<br/>reverse proxy + rate limiting"]
+        FRONT["frontend :3000<br/>Next.js"]
+        BE["backend :8000<br/>FastAPI"]
+        ML["anomaly-detection :8001<br/>FastAPI + ML"]
+        PG[("PostgreSQL :5432")]
+        RD[("Redis :6379")]
+        IPFS["IPFS :5001"]
+    end
+    CHAIN[("Polygon Amoy<br/>3 smart contracts")]
+
+    NGX --> FRONT
+    NGX --> BE
+    NGX --> ML
+    BE --> PG
+    BE --> RD
+    BE --> IPFS
+    ML --> PG
+    BE -.->|Web3 RPC| CHAIN
 ```
 ---
 
