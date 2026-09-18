@@ -6,9 +6,9 @@ import { Header } from './Header';
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isLandingPage = pathname === '/';
+  const isChromeless = pathname === '/' || pathname === '/signin' || pathname === '/signup';
 
-  if (isLandingPage) {
+  if (isChromeless) {
     return <>{children}</>;
   }
 

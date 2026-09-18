@@ -21,8 +21,8 @@ export default function LandingPage() {
             <a className="text-sm font-semibold text-primary font-bold border-b-2 border-primary pb-1" href="#security">Security</a>
           </div>
           <div className="hidden md:flex items-center gap-4">
-            <a className="text-sm font-semibold text-foreground hover:text-primary transition-colors" href="#">Sign In</a>
-            <Link href={connected ? '/dashboard' : '#'} className="bg-primary-container text-on-primary-container text-sm font-semibold px-6 py-2 rounded hover:opacity-90 transition-opacity">
+            <Link href="/signin" className="text-sm font-semibold text-foreground hover:text-primary transition-colors">Sign In</Link>
+            <Link href="/signup" className="bg-primary-container text-on-primary-container text-sm font-semibold px-6 py-2 rounded hover:opacity-90 transition-opacity">
               Get Started
             </Link>
           </div>
@@ -49,7 +49,7 @@ export default function LandingPage() {
               Blockchain-Based Secure Platform for Identity, Access Control &amp; Digital Asset Management. Your Identity. Your Assets. Your Control.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href={connected ? '/dashboard' : '#'} className="bg-primary-container text-on-primary-container text-sm font-semibold px-8 py-3 rounded hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+              <Link href={connected ? '/dashboard' : '/signup'} className="bg-primary-container text-on-primary-container text-sm font-semibold px-8 py-3 rounded hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
                 Get Started
                 <span className="material-symbols-outlined text-sm">arrow_forward</span>
               </Link>
@@ -201,7 +201,7 @@ export default function LandingPage() {
             <p className="text-base text-muted-foreground max-w-xl mb-10" style={{ fontFamily: 'var(--font-nunito)', lineHeight: 1.6 }}>
               Move beyond the single point of failure. Join the organizations already using DecentraID to automate access via smart contracts, tokenize digital assets, and protect their infrastructure with AI-driven anomaly detection.
             </p>
-            <Link href={connected ? '/dashboard' : '#'} className="bg-primary-container text-on-primary-container text-sm font-semibold px-10 py-4 rounded hover:opacity-90 transition-opacity text-lg">
+            <Link href={connected ? '/dashboard' : '/signup'} className="bg-primary-container text-on-primary-container text-sm font-semibold px-10 py-4 rounded hover:opacity-90 transition-opacity text-lg">
               Get Started for Free
             </Link>
           </div>
