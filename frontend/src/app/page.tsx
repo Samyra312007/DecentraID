@@ -3,6 +3,12 @@
 import { useDecentraID } from '@/hooks/useDecentraID';
 import Link from 'next/link';
 
+const NAV_LINKS = [
+  { label: 'Products', href: '#products' },
+  { label: 'Solutions', href: '#solutions' },
+  { label: 'Security', href: '#security' },
+];
+
 export default function LandingPage() {
   const { connected } = useDecentraID();
 
@@ -16,9 +22,19 @@ export default function LandingPage() {
             DecentraID
           </a>
           <div className="hidden md:flex items-center gap-8">
-            <a className="group relative text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors py-2 px-4 rounded-md hover:bg-muted" href="#products">Products<span aria-hidden className="pointer-events-none absolute left-4 right-4 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100" /></a>
-            <a className="group relative text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors py-2 px-4 rounded-md hover:bg-muted" href="#solutions">Solutions<span aria-hidden className="pointer-events-none absolute left-4 right-4 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100" /></a>
-            <a className="group relative text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors py-2 px-4 rounded-md hover:bg-muted" href="#security">Security<span aria-hidden className="pointer-events-none absolute left-4 right-4 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100" /></a>
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="group relative text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors py-2 px-4 rounded-md hover:bg-muted"
+              >
+                {link.label}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-4 right-4 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100"
+                />
+              </a>
+            ))}
           </div>
           <div className="hidden md:flex items-center gap-4">
             <Link href="/signin" className="text-sm font-semibold text-foreground hover:text-primary transition-colors">Sign In</Link>
@@ -185,6 +201,60 @@ export default function LandingPage() {
                 <span className="text-xs font-semibold text-primary uppercase tracking-wider">
                   Enhanced by AI-powered anomaly detection for proactive threat mitigation.
                 </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Solutions Section ── */}
+        <section id="solutions" className="py-24 px-4 md:px-16 bg-surface-container-lowest">
+          <div className="max-w-[1280px] mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-2xl md:text-[32px] mb-4" style={{ fontFamily: 'var(--font-literata)', fontWeight: 600, lineHeight: 1.3 }}>Solutions for Modern Teams</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-nunito)', lineHeight: 1.6 }}>
+                Whether you protect customers, employees, or infrastructure, DecentraID adapts to your access model.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="glass-card inner-glow hover:border-primary/30 transition-all group">
+                <div className="w-12 h-12 rounded-lg bg-surface-container border border-border flex items-center justify-center mb-6 group-hover:bg-primary-container/10 transition-colors">
+                  <span className="material-symbols-outlined text-primary">account_balance</span>
+                </div>
+                <h3 className="text-xl mb-3" style={{ fontFamily: 'var(--font-literata)', fontWeight: 500, lineHeight: 1.4 }}>Enterprise IAM Replacement</h3>
+                <p className="text-base text-muted-foreground" style={{ fontFamily: 'var(--font-nunito)', lineHeight: 1.6 }}>
+                  Replace password databases with wallet-backed identities, cutting breach surface and helpdesk cost.
+                </p>
+              </div>
+
+              <div className="glass-card inner-glow hover:border-primary/30 transition-all group">
+                <div className="w-12 h-12 rounded-lg bg-surface-container border border-border flex items-center justify-center mb-6 group-hover:bg-primary-container/10 transition-colors">
+                  <span className="material-symbols-outlined text-primary">health_and_safety</span>
+                </div>
+                <h3 className="text-xl mb-3" style={{ fontFamily: 'var(--font-literata)', fontWeight: 500, lineHeight: 1.4 }}>Healthcare Credentialing</h3>
+                <p className="text-base text-muted-foreground" style={{ fontFamily: 'var(--font-nunito)', lineHeight: 1.6 }}>
+                  Portable, verifiable staff credentials with on-chain policy enforcement for sensitive systems.
+                </p>
+              </div>
+
+              <div className="glass-card inner-glow hover:border-primary/30 transition-all group">
+                <div className="w-12 h-12 rounded-lg bg-surface-container border border-border flex items-center justify-center mb-6 group-hover:bg-primary-container/10 transition-colors">
+                  <span className="material-symbols-outlined text-primary">school</span>
+                </div>
+                <h3 className="text-xl mb-3" style={{ fontFamily: 'var(--font-literata)', fontWeight: 500, lineHeight: 1.4 }}>Education &amp; Certificates</h3>
+                <p className="text-base text-muted-foreground" style={{ fontFamily: 'var(--font-nunito)', lineHeight: 1.6 }}>
+                  Issue tamper-proof diplomas and licenses as assets, instantly verifiable by any employer.
+                </p>
+              </div>
+
+              <div className="glass-card inner-glow hover:border-primary/30 transition-all group">
+                <div className="w-12 h-12 rounded-lg bg-surface-container border border-border flex items-center justify-center mb-6 group-hover:bg-primary-container/10 transition-colors">
+                  <span className="material-symbols-outlined text-primary">work</span>
+                </div>
+                <h3 className="text-xl mb-3" style={{ fontFamily: 'var(--font-literata)', fontWeight: 500, lineHeight: 1.4 }}>Supply Chain Provenance</h3>
+                <p className="text-base text-muted-foreground" style={{ fontFamily: 'var(--font-nunito)', lineHeight: 1.6 }}>
+                  Tokenized certificates track custody across partners with immutable provenance.
+                </p>
               </div>
             </div>
           </div>

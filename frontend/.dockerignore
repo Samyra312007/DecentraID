@@ -1,0 +1,29 @@
+# Keep Docker build context clean: host build artifacts must never leak into
+# the image and serve stale frontend code.
+node_modules
+.next
+out
+build
+dist
+
+# Dependency and lockfile tooling noise
+npm-debug.log*
+yarn-error.log*
+
+# Local env files
+.env
+.env.local
+.env.development
+.env.test
+
+# Git and editor noise
+.git
+.gitignore
+README.md
+.vscode
+.idea
+
+# Tests and coverage
+coverage
+*.test.tsx
+*.test.ts
