@@ -3,9 +3,7 @@
 import { useState } from 'react';
 import type { Asset } from '@/types/did';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 
 interface TransferModalProps {
   asset: Asset;
@@ -41,38 +39,52 @@ export function TransferModal({ asset, isOpen, onClose, onTransfer }: TransferMo
           <DialogTitle>Transfer Asset</DialogTitle>
         </DialogHeader>
 
-        <div className="p-4 rounded-lg bg-muted mb-4">
-          <p className="text-xs text-muted-foreground mb-1">Transferring</p>
-          <p className="text-sm font-medium text-foreground">{asset.name}</p>
-          <p className="text-xs font-mono text-muted-foreground">Token #{asset.token_id}</p>
+        <div className="mb-4 flex items-center gap-3 rounded-lg border border-border bg-surface-container p-4">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+            <span className="material-symbols-outlined text-primary">token</span>
+          </div>
+          <div>
+            <p className="text-sm font-medium text-foreground">{asset.name}</p>
+            <p className="font-mono text-xs text-muted-foreground">Token #{asset.token_id}</p>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="address">Recipient Address</Label>
+            <label htmlFor="transfer-address" className="text-sm font-semibold text-foreground">Recipient Address</label>
             <Input
-              id="address"
+              id="transfer-address"
+              className="h-10 font-mono"
               value={toAddress}
               onChange={(e) => setToAddress(e.target.value)}
-              className="font-mono"
               placeholder="0x..."
               required
             />
           </div>
 
           {error && (
-            <div className="p-3 rounded-lg text-sm bg-destructive/10 text-destructive">
-              {error}
+            <div className="flex items-start gap-2 rounded-md border border-danger/30 bg-danger/5 px-3 py-2.5 text-sm text-danger" role="alert">
+              <span className="material-symbols-outlined text-base leading-5">error</span>
+              <span>{error}</span>
             </div>
           )}
 
           <div className="flex gap-3 pt-1">
-            <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="flex-1">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="flex-1 rounded border border-border py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-50"
+            >
               Cancel
-            </Button>
-            <Button type="submit" disabled={loading || !toAddress} className="flex-1">
+            </button>
+            <button
+              type="submit"
+              disabled={loading || !toAddress}
+              className="flex-1 rounded bg-primary-container py-2.5 text-sm font-semibold text-on-primary-container transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
               {loading ? 'Transferring...' : 'Transfer'}
-            </Button>
+            </button>
           </div>
         </form>
       </DialogContent>

@@ -1,11 +1,18 @@
 'use client';
 
+import Link from 'next/link';
 import { useDecentraID } from '@/hooks/useDecentraID';
 import { WalletConnect } from '@/components/common/WalletConnect';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { PageHeader } from '@/components/layout/PageHeader';
+
+const stats = [
+  { label: 'Identities', value: '2', change: '+1 this week', icon: 'badge' },
+  { label: 'Assets', value: '3', change: '+1 this month', icon: 'token' },
+  { label: 'Access Requests', value: '5', change: '2 pending', icon: 'gavel' },
+  { label: 'Risk Score', value: '23', change: 'Low risk', icon: 'monitoring' },
+];
 
 export default function DashboardPage() {
   const { connected, address } = useDecentraID();
@@ -13,10 +20,11 @@ export default function DashboardPage() {
   if (!connected) {
     return (
       <div className="space-y-5">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground mt-1">Overview of your decentralized identity</p>
-        </div>
+        <PageHeader
+          eyebrow="Overview"
+          title="Dashboard"
+          subtitle="Overview of your decentralized identity"
+        />
         <div className="max-w-md"><WalletConnect /></div>
       </div>
     );
@@ -24,65 +32,75 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">Overview of your decentralized identity</p>
-      </div>
+      <PageHeader
+        eyebrow="Overview"
+        title={`Welcome back${address ? '' : ''}`}
+        subtitle="Your identity, assets, and access signals at a glance."
+      />
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {[
-          { label: 'DIDs', value: '2', change: '+1 this week' },
-          { label: 'Assets', value: '3', change: '+1 this month' },
-          { label: 'Access Requests', value: '5', change: '2 pending' },
-          { label: 'Risk Score', value: '23', change: 'Low risk' },
-        ].map((stat) => (
-          <Card key={stat.label}>
-            <CardContent className="pt-6">
-              <p className="text-xs text-muted-foreground mb-1">{stat.label}</p>
-              <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{stat.change}</p>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        {stats.map((stat) => (
+          <Card key={stat.label} className="group hover:border-primary/30 transition-colors">
+            <CardContent className="pt-5">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{stat.label}</p>
+                <span className="material-symbols-outlined text-[20px] text-primary/70 transition-colors group-hover:text-primary">
+                  {stat.icon}
+                </span>
+              </div>
+              <p
+                className="text-3xl text-foreground"
+                style={{ fontFamily: 'var(--font-literata)', fontWeight: 600 }}
+              >
+                {stat.value}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">{stat.change}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent DIDs</CardTitle>
+      {/* Quick views */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Card className="inner-glow">
+          <CardHeader className="flex-row items-center justify-between">
+            <CardTitle>Recent Identities</CardTitle>
+            <span className="material-symbols-outlined text-[20px] text-primary">badge</span>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className="space-y-1">
               {['Personal Identity', 'Business Identity'].map((name) => (
-                <div key={name} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                <div key={name} className="flex items-center justify-between border-b border-border py-2.5 last:border-0">
                   <span className="text-sm text-foreground">{name}</span>
                   <Badge variant="secondary">Active</Badge>
                 </div>
               ))}
             </div>
-            <Link href="/did" className="inline-flex items-center text-sm text-primary hover:text-primary/80 mt-4 transition-colors">
-              View all DIDs <ArrowRight className="w-3.5 h-3.5 ml-1" />
+            <Link href="/did" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-opacity hover:opacity-80">
+              View all identities
+              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
             </Link>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
+        <Card className="inner-glow">
+          <CardHeader className="flex-row items-center justify-between">
             <CardTitle>Recent Assets</CardTitle>
+            <span className="material-symbols-outlined text-[20px] text-primary">token</span>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className="space-y-1">
               {['Driver License', 'University Degree'].map((name) => (
-                <div key={name} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                <div key={name} className="flex items-center justify-between border-b border-border py-2.5 last:border-0">
                   <span className="text-sm text-foreground">{name}</span>
                   <Badge variant="outline">Credential</Badge>
                 </div>
               ))}
             </div>
-            <Link href="/assets" className="inline-flex items-center text-sm text-primary hover:text-primary/80 mt-4 transition-colors">
-              View all Assets <ArrowRight className="w-3.5 h-3.5 ml-1" />
+            <Link href="/assets" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-opacity hover:opacity-80">
+              View all assets
+              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
             </Link>
           </CardContent>
         </Card>

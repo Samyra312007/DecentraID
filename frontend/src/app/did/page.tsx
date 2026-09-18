@@ -1,13 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import { DIDCard } from '@/components/did/DIDCard';
 import { DIDCreateForm } from '@/components/did/DIDCreateForm';
 import { DIDDetail } from '@/components/did/DIDDetail';
 import { WalletConnect } from '@/components/common/WalletConnect';
 import { useDecentraID } from '@/hooks/useDecentraID';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 import type { DIDDocument } from '@/types/did';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 const mockDIDs: DIDDocument[] = [
   {
@@ -42,10 +42,11 @@ export default function DIDPage() {
   if (!connected) {
     return (
       <div className="space-y-5">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Decentralized Identifiers</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage your DIDs on Polygon blockchain</p>
-        </div>
+        <PageHeader
+          eyebrow="Identity"
+          title="Decentralized Identifiers"
+          subtitle="Manage your DIDs on Polygon blockchain"
+        />
         <div className="max-w-md"><WalletConnect /></div>
       </div>
     );
@@ -54,10 +55,11 @@ export default function DIDPage() {
   if (view === 'create') {
     return (
       <div className="space-y-5">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Create New DID</h1>
-          <p className="text-sm text-muted-foreground mt-1">Set up a new decentralized identity</p>
-        </div>
+        <PageHeader
+          eyebrow="Identity"
+          title="Create New DID"
+          subtitle="Set up a new decentralized identity"
+        />
         <div className="max-w-2xl"><DIDCreateForm onSuccess={() => setView('list')} onCancel={() => setView('list')} /></div>
       </div>
     );
@@ -73,15 +75,22 @@ export default function DIDPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Decentralized Identifiers</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage your DIDs on Polygon blockchain</p>
-        </div>
-        <Button onClick={() => setView('create')}>+ Create DID</Button>
-      </div>
+      <PageHeader
+        eyebrow="Identity"
+        title="Decentralized Identifiers"
+        subtitle="Manage your DIDs on Polygon blockchain"
+        actions={
+          <button
+            onClick={() => setView('create')}
+            className="inline-flex items-center gap-2 rounded bg-primary-container px-5 py-2.5 text-sm font-semibold text-on-primary-container transition-opacity hover:opacity-90"
+          >
+            <span className="material-symbols-outlined text-base">add</span>
+            Create DID
+          </button>
+        }
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {mockDIDs.map((did) => (
           <DIDCard key={did.id} did={did} onSelect={(d) => { setSelectedDID(d); setView('detail'); }} />
         ))}

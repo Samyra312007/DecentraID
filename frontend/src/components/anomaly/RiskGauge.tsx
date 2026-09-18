@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface RiskGaugeProps {
   score: number;
@@ -30,11 +30,16 @@ export function RiskGauge({ score, label = 'Risk Score' }: RiskGaugeProps) {
   const rotation = (score / 100) * 180 - 90;
 
   return (
-    <Card>
+    <Card className="inner-glow">
       <CardContent className="text-center">
-        <h3 className="text-base font-semibold text-foreground mb-5">{label}</h3>
+        <h3
+          className="mb-5 text-base text-foreground"
+          style={{ fontFamily: 'var(--font-literata)', fontWeight: 600 }}
+        >
+          {label}
+        </h3>
 
-        <div className="relative w-48 h-24 mx-auto mb-4">
+        <div className="relative mx-auto mb-4 h-24 w-48">
           <div
             className="absolute inset-0 rounded-t-full opacity-15"
             style={{
@@ -42,19 +47,22 @@ export function RiskGauge({ score, label = 'Risk Score' }: RiskGaugeProps) {
             }}
           />
           <div
-            className="absolute bottom-0 left-1/2 w-1 h-20 origin-bottom"
+            className="absolute bottom-0 left-1/2 h-20 w-1 origin-bottom rounded-full"
             style={{
               backgroundColor: color,
               transform: `translateX(-50%) rotate(${rotation}deg)`,
             }}
           />
           <div
-            className="absolute bottom-0 left-1/2 w-4 h-4 rounded-full -translate-x-1/2 translate-y-1/2"
+            className="absolute bottom-0 left-1/2 h-4 w-4 -translate-x-1/2 translate-y-1/2 rounded-full"
             style={{ backgroundColor: color }}
           />
         </div>
 
-        <div className={`text-4xl font-bold mb-2 ${getColor(score)}`}>
+        <div
+          className={`mb-2 text-4xl ${getColor(score)}`}
+          style={{ fontFamily: 'var(--font-literata)', fontWeight: 600 }}
+        >
           {score}
         </div>
         <div className={`text-sm font-medium ${getColor(score)}`}>

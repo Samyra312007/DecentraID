@@ -18,24 +18,26 @@ export function BehaviorChart({ data, title = 'Behavior Pattern', maxValue = 100
   const max = Math.max(...data.map(d => d.value), maxValue);
 
   return (
-    <Card>
+    <Card className="inner-glow">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-48 flex items-end gap-1">
+        <div className="flex h-48 items-end gap-1.5">
           {data.map((point, index) => {
             const height = (point.value / max) * 100;
             const isAnomaly = point.baseline ? point.value > point.baseline * 1.5 : false;
 
             return (
-              <div key={index} className="flex-1 flex flex-col items-center gap-1">
+              <div key={index} className="group flex flex-1 flex-col items-center gap-1">
                 <div
-                  className="w-full rounded-t transition-all"
+                  className="w-full rounded-full transition-all duration-200 group-hover:opacity-100"
                   style={{
                     height: `${height}%`,
-                    backgroundColor: isAnomaly ? 'var(--danger)' : 'var(--primary)',
-                    opacity: isAnomaly ? 1 : 0.8,
+                    background: isAnomaly
+                      ? 'var(--danger)'
+                      : 'linear-gradient(to top, color-mix(in srgb, var(--primary) 45%, transparent), var(--primary))',
+                    opacity: isAnomaly ? 1 : 0.75,
                   }}
                 />
               </div>
@@ -43,7 +45,7 @@ export function BehaviorChart({ data, title = 'Behavior Pattern', maxValue = 100
           })}
         </div>
 
-        <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+        <div className="mt-2 flex justify-between text-xs text-muted-foreground">
           {data.length > 0 && (
             <>
               <span>{new Date(data[0].timestamp).toLocaleTimeString()}</span>
@@ -52,13 +54,13 @@ export function BehaviorChart({ data, title = 'Behavior Pattern', maxValue = 100
           )}
         </div>
 
-        <div className="flex items-center gap-4 mt-3 text-xs">
+        <div className="mt-3 flex items-center gap-4 text-xs">
           <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'var(--primary)' }} />
+            <div className="h-2.5 w-2.5 rounded-sm bg-primary/75" />
             <span className="text-muted-foreground">Actual</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'var(--danger)' }} />
+            <div className="h-2.5 w-2.5 rounded-sm bg-danger" />
             <span className="text-muted-foreground">Anomaly</span>
           </div>
         </div>

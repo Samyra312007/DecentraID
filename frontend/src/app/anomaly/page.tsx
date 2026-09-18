@@ -3,6 +3,7 @@
 import { AnomalyDetail } from '@/components/anomaly/AnomalyDetail';
 import { WalletConnect } from '@/components/common/WalletConnect';
 import { useDecentraID } from '@/hooks/useDecentraID';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 const mockAlerts = [
   { id: '1', type: 'Unusual Access Pattern', severity: 'high' as const, message: 'Multiple failed access attempts detected from different locations', timestamp: '2024-01-20T14:22:00Z', acknowledged: false },
@@ -25,10 +26,11 @@ export default function AnomalyPage() {
   if (!connected) {
     return (
       <div className="space-y-5">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Anomaly Detection</h1>
-          <p className="text-sm text-muted-foreground mt-1">Monitor and analyze suspicious activity</p>
-        </div>
+        <PageHeader
+          eyebrow="Security"
+          title="Anomaly Detection"
+          subtitle="Monitor and analyze suspicious activity"
+        />
         <div className="max-w-md"><WalletConnect /></div>
       </div>
     );
@@ -36,10 +38,11 @@ export default function AnomalyPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-2xl font-semibold text-foreground">Anomaly Detection</h1>
-        <p className="text-sm text-muted-foreground mt-1">Monitor and analyze suspicious activity</p>
-      </div>
+      <PageHeader
+        eyebrow="Security"
+        title="Anomaly Detection"
+        subtitle="Monitor and analyze suspicious activity"
+      />
 
       <AnomalyDetail
         score={23}

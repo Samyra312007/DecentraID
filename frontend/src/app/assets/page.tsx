@@ -6,8 +6,8 @@ import { MintForm } from '@/components/assets/MintForm';
 import { TransferModal } from '@/components/assets/TransferModal';
 import { WalletConnect } from '@/components/common/WalletConnect';
 import { useDecentraID } from '@/hooks/useDecentraID';
-import { Button } from '@/components/ui/button';
 import type { Asset } from '@/types/did';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 const mockAssets: Asset[] = [
   { token_id: '1', name: 'Driver License', asset_type: 'credential', issuer_address: '0x1234567890abcdef1234567890abcdef12345678', owner_address: '0x1234567890abcdef1234567890abcdef12345678', metadata: { description: 'Valid driver license credential' }, created_at: '2024-01-15T10:30:00Z', updated_at: '2024-01-15T10:30:00Z' },
@@ -23,10 +23,11 @@ export default function AssetsPage() {
   if (!connected) {
     return (
       <div className="space-y-5">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Assets</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage your NFT credentials and documents</p>
-        </div>
+        <PageHeader
+          eyebrow="Assets"
+          title="Digital Assets"
+          subtitle="Manage your NFT credentials and documents"
+        />
         <div className="max-w-md"><WalletConnect /></div>
       </div>
     );
@@ -35,10 +36,11 @@ export default function AssetsPage() {
   if (view === 'mint') {
     return (
       <div className="space-y-5">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Mint New Asset</h1>
-          <p className="text-sm text-muted-foreground mt-1">Create a new NFT credential</p>
-        </div>
+        <PageHeader
+          eyebrow="Assets"
+          title="Mint New Asset"
+          subtitle="Create a new NFT credential"
+        />
         <div className="max-w-2xl"><MintForm onSuccess={() => setView('grid')} onCancel={() => setView('grid')} /></div>
       </div>
     );
@@ -46,13 +48,20 @@ export default function AssetsPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Assets</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage your NFT credentials and documents</p>
-        </div>
-        <Button onClick={() => setView('mint')}>+ Mint Asset</Button>
-      </div>
+      <PageHeader
+        eyebrow="Assets"
+        title="Digital Assets"
+        subtitle="Manage your NFT credentials and documents"
+        actions={
+          <button
+            onClick={() => setView('mint')}
+            className="inline-flex items-center gap-2 rounded bg-primary-container px-5 py-2.5 text-sm font-semibold text-on-primary-container transition-opacity hover:opacity-90"
+          >
+            <span className="material-symbols-outlined text-base">add</span>
+            Mint Asset
+          </button>
+        }
+      />
 
       <AssetGrid assets={mockAssets} onSelectAsset={(asset) => setTransferAsset(asset)} />
 

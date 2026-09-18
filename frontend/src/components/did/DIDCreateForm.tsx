@@ -3,11 +3,10 @@
 import { useState } from 'react';
 import { useDecentraID } from '@/hooks/useDecentraID';
 import type { DIDCreateRequest } from '@/types/did';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 interface DIDCreateFormProps {
   onSuccess?: () => void;
@@ -67,7 +66,7 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
   if (!connected) {
     return (
       <Card>
-        <CardContent className="text-center py-8">
+        <CardContent className="py-8 text-center">
           <p className="text-sm text-muted-foreground">Please connect your wallet to create a DID</p>
         </CardContent>
       </Card>
@@ -75,16 +74,14 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create New DID</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <Card className="inner-glow">
+      <CardContent className="pt-2">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
+            <label htmlFor="did-name" className="text-sm font-semibold text-foreground">Name</label>
             <Input
-              id="name"
+              id="did-name"
+              className="h-10"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="My DID"
@@ -93,9 +90,10 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <label htmlFor="did-desc" className="text-sm font-semibold text-foreground">Description</label>
             <Textarea
-              id="description"
+              id="did-desc"
+              className="min-h-[88px]"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={3}
@@ -104,9 +102,10 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="endpoint">Service Endpoint</Label>
+            <label htmlFor="did-endpoint" className="text-sm font-semibold text-foreground">Service Endpoint</label>
             <Input
-              id="endpoint"
+              id="did-endpoint"
+              className="h-10"
               type="url"
               value={formData.serviceEndpoint}
               onChange={(e) => setFormData({ ...formData, serviceEndpoint: e.target.value })}
@@ -115,21 +114,41 @@ export function DIDCreateForm({ onSuccess, onCancel }: DIDCreateFormProps) {
           </div>
 
           {error && (
-            <div className="p-3 rounded-lg text-sm bg-destructive/10 text-destructive">
-              {error}
+            <div className="flex items-start gap-2 rounded-md border border-danger/30 bg-danger/5 px-3 py-2.5 text-sm text-danger" role="alert">
+              <span className="material-symbols-outlined text-base leading-5">error</span>
+              <span>{error}</span>
             </div>
           )}
 
           <div className="flex gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={onCancel} disabled={loading} className="flex-1">
+            <button
+              type="button"
+              onClick={onCancel}
+              disabled={loading}
+              className="flex-1 rounded border border-border py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-50"
+            >
               Cancel
-            </Button>
-            <Button type="submit" disabled={loading} className="flex-1">
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 rounded bg-primary-container py-2.5 text-sm font-semibold text-on-primary-container transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
               {loading ? 'Creating...' : 'Create DID'}
-            </Button>
+            </button>
           </div>
         </form>
       </CardContent>
     </Card>
+  );
+}
+
+export function DIDCreateFormHeader() {
+  return (
+    <PageHeader
+      eyebrow="Identity"
+      title="Create New DID"
+      subtitle="Set up a new decentralized identity"
+    />
   );
 }

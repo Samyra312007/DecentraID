@@ -1,11 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
 
 interface PolicyFormProps {
   onSuccess?: () => void;
@@ -50,16 +49,14 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create Access Policy</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <Card className="inner-glow">
+      <CardContent className="pt-2">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="policy-name">Policy Name</Label>
+            <label htmlFor="policy-name" className="text-sm font-semibold text-foreground">Policy Name</label>
             <Input
               id="policy-name"
+              className="h-10"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="e.g., Document Access Policy"
@@ -68,9 +65,10 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="policy-desc">Description</Label>
+            <label htmlFor="policy-desc" className="text-sm font-semibold text-foreground">Description</label>
             <Textarea
               id="policy-desc"
+              className="min-h-[72px]"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={2}
@@ -79,12 +77,12 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="resource-type">Resource Type</Label>
+            <label htmlFor="resource-type" className="text-sm font-semibold text-foreground">Resource Type</label>
             <select
               id="resource-type"
               value={formData.resourceType}
               onChange={(e) => setFormData({ ...formData, resourceType: e.target.value })}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="flex h-10 w-full rounded-md border border-input bg-input/30 px-3 py-1 text-sm text-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
               required
             >
               <option value="">Select resource type</option>
@@ -96,29 +94,33 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label>Allowed Actions</Label>
+            <span className="text-sm font-semibold text-foreground">Allowed Actions</span>
             <div className="flex flex-wrap gap-2">
               {availableActions.map(action => (
-                <Button
+                <button
                   key={action}
                   type="button"
-                  variant={formData.allowedActions.includes(action) ? 'default' : 'outline'}
-                  size="sm"
                   onClick={() => toggleAction(action)}
+                  className={cn(
+                    'rounded-md px-3 py-1.5 text-xs font-semibold capitalize transition-colors',
+                    formData.allowedActions.includes(action)
+                      ? 'bg-primary text-primary-foreground'
+                      : 'border border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
+                  )}
                 >
                   {action}
-                </Button>
+                </button>
               ))}
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="required-role">Required Role</Label>
+            <label htmlFor="required-role" className="text-sm font-semibold text-foreground">Required Role</label>
             <select
               id="required-role"
               value={formData.requiredRole}
               onChange={(e) => setFormData({ ...formData, requiredRole: e.target.value })}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="flex h-10 w-full rounded-md border border-input bg-input/30 px-3 py-1 text-sm text-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
             >
               <option value="">No role required</option>
               <option value="admin">Admin</option>
@@ -128,18 +130,28 @@ export function PolicyForm({ onSuccess, onCancel }: PolicyFormProps) {
           </div>
 
           {error && (
-            <div className="p-3 rounded-lg text-sm bg-destructive/10 text-destructive">
-              {error}
+            <div className="flex items-start gap-2 rounded-md border border-danger/30 bg-danger/5 px-3 py-2.5 text-sm text-danger" role="alert">
+              <span className="material-symbols-outlined text-base leading-5">error</span>
+              <span>{error}</span>
             </div>
           )}
 
           <div className="flex gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={onCancel} disabled={loading} className="flex-1">
+            <button
+              type="button"
+              onClick={onCancel}
+              disabled={loading}
+              className="flex-1 rounded border border-border py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-50"
+            >
               Cancel
-            </Button>
-            <Button type="submit" disabled={loading} className="flex-1">
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 rounded bg-primary-container py-2.5 text-sm font-semibold text-on-primary-container transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
               {loading ? 'Creating...' : 'Create Policy'}
-            </Button>
+            </button>
           </div>
         </form>
       </CardContent>

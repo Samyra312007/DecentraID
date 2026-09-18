@@ -3,7 +3,6 @@
 import type { DIDDocument } from '@/types/did';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { KeyRound } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface DIDCardProps {
@@ -17,27 +16,21 @@ const statusVariant = {
   deactivated: 'destructive' as const,
 };
 
-const statusColor = {
-  active: 'text-success',
-  suspended: 'text-warning',
-  deactivated: 'text-danger',
-};
-
 export function DIDCard({ did, onSelect }: DIDCardProps) {
   return (
     <Card
-      className="cursor-pointer hover:bg-accent/50 transition-colors"
+      className="group cursor-pointer transition-all hover:border-primary/40"
       onClick={() => onSelect?.(did)}
     >
       <CardContent>
-        <div className="flex items-start justify-between mb-4">
+        <div className="mb-4 flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <KeyRound className="w-5 h-5 text-primary" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-surface-container transition-colors group-hover:bg-primary/10">
+              <span className="material-symbols-outlined text-primary">badge</span>
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm font-semibold text-foreground truncate">{did.name || 'Unnamed DID'}</h3>
-              <p className="text-xs font-mono text-muted-foreground truncate">
+              <h3 className="truncate text-sm font-semibold text-foreground">{did.name || 'Unnamed DID'}</h3>
+              <p className="truncate font-mono text-xs text-muted-foreground">
                 {did.did.slice(0, 20)}...
               </p>
             </div>
@@ -63,6 +56,14 @@ export function DIDCard({ did, onSelect }: DIDCardProps) {
             </div>
           )}
         </div>
+
+        <div
+          aria-hidden
+          className={cn(
+            'pointer-events-none mt-4 h-0.5 w-full origin-left rounded-full bg-primary/60 transition-transform duration-200',
+            'scale-x-0 group-hover:scale-x-100'
+          )}
+        />
       </CardContent>
     </Card>
   );
