@@ -18,7 +18,7 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-8">
             <a className="group relative text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors py-2 px-4 rounded-md hover:bg-muted" href="#products">Products<span aria-hidden className="pointer-events-none absolute left-4 right-4 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100" /></a>
             <a className="group relative text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors py-2 px-4 rounded-md hover:bg-muted" href="#solutions">Solutions<span aria-hidden className="pointer-events-none absolute left-4 right-4 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100" /></a>
-            <a className="text-sm font-semibold text-primary font-bold border-b-2 border-primary pb-1" href="#security">Security</a>
+            <a className="group relative text-sm font-semibold text-primary font-bold" href="#security">Security<span aria-hidden className="pointer-events-none absolute left-0 right-0 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100" /></a>
           </div>
           <div className="hidden md:flex items-center gap-4">
             <Link href="/signin" className="text-sm font-semibold text-foreground hover:text-primary transition-colors">Sign In</Link>
