@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useDecentraID } from '@/hooks/useDecentraID';
+import { useRouter } from 'next/navigation';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: 'space_dashboard' },
@@ -85,14 +87,30 @@ export function Sidebar() {
 
         {/* Footer */}
         <div className="border-t border-sidebar-border p-3">
-          <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-container px-3 py-2.5">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
-            <span className="text-xs font-semibold tracking-wide text-muted-foreground">
-              Terra Protocol v1.0
-            </span>
-          </div>
+          <SignOutButton />
         </div>
       </aside>
     </>
+  );
+}
+
+function SignOutButton() {
+  const router = useRouter();
+  const { connected, disconnectWallet } = useDecentraID();
+
+  if (!connected) return null;
+
+  return (
+    <button
+      onClick={() => {
+        disconnectWallet();
+        router.push('/');
+        router.refresh();
+      }}
+      className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-muted-foreground transition-colors hover:bg-danger/10 hover:text-danger"
+    >
+      <span className="material-symbols-outlined text-[20px]">logout</span>
+      Sign Out
+    </button>
   );
 }

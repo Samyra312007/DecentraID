@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
-import { api } from '@/lib/api';
+import { api, loadSession, saveSession, clearSession } from '@/lib/api';
 import { connectWallet } from '@/lib/web3';
 import type { DIDDocument, Asset, AnomalyAlert } from '@/types/did';
 
@@ -18,6 +18,33 @@ export function useDecentraID() {
   const [address, setAddress] = useState<string | null>(null);
   const [chainId, setChainId] = useState<number | null>(null);
   const [connected, setConnected] = useState(false);
+  const [restoring, setRestoring] = useState(true);
+
+  // Restore a persisted session on mount so auth survives page navigation.
+  useEffect(() => {
+    const session = loadSession();
+    if (session) {
+      setToken(session.token);
+      setAddress(session.address);
+      setConnected(true);
+      api.setToken(session.token);
+      if (session.did) {
+        api
+          .resolveDID(session.did)
+          .then((res: unknown) => {
+            const doc = (res as { document?: DIDDocument }).document;
+            if (doc) setDID(doc);
+          })
+          .catch(() => {
+            // DID may not exist yet; ignore
+          });
+      }
+      fetchAssets(session.token);
+      fetchAlerts(session.token);
+    }
+    setRestoring(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const connectWalletHandler = useCallback(async () => {
     setLoading(true);
@@ -42,6 +69,11 @@ export function useDecentraID() {
       setAddress(wallet.address);
       setConnected(true);
       api.setToken(loginResponse.access_token);
+      saveSession({
+        token: loginResponse.access_token,
+        address: wallet.address,
+        did: loginResponse.did ?? null,
+      });
 
       // Fetch DID
       try {
@@ -70,6 +102,7 @@ export function useDecentraID() {
     setAssets([]);
     setAlerts([]);
     api.setToken(null);
+    clearSession();
   }, []);
 
   const isCorrectNetwork = chainId === POLYGON_AMOY_CHAIN_ID;
@@ -178,6 +211,7 @@ export function useDecentraID() {
     assets,
     alerts,
     loading,
+    restoring,
     error,
     token,
     address,
