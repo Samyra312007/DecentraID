@@ -82,6 +82,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    image: decentraid-frontend:latest
     container_name: decentraid-frontend
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:8000

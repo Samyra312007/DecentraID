@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "docker:up": "docker compose up -d --build frontend",
+    "docker:rebuild": "docker compose build --no-cache frontend && docker compose up -d frontend",
+    "docker:logs": "docker compose logs -f frontend"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

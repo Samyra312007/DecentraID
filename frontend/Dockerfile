@@ -11,6 +11,10 @@ RUN npm ci
 # Copy application code
 COPY . .
 
+# Bust stale source layers when files change
+ARG SOURCE_COMMIT=unknown
+ENV SOURCE_COMMIT=${SOURCE_COMMIT}
+
 # Build the application
 RUN npm run build
 
