@@ -3,6 +3,7 @@ Auth API endpoint — wallet signature based authentication.
 Users sign a message with their Ethereum wallet to authenticate.
 """
 
+from eth_account.messages import encode_defunct
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from web3 import Web3
@@ -33,12 +34,16 @@ async def login(request: LoginRequest):
     Authenticate with wallet signature.
     User signs 'Authenticate with DecentraID' and submits the signature.
     """
-    # Verify the signature
+    # Verify the signature.
+    # The frontend signs via MetaMask personal_sign (EIP-191). The message must
+    # be wrapped with the EIP-191 prefix (\x19Ethereum Signed Message:\n<len>)
+    # via encode_defunct, otherwise recovery always fails with "Invalid signature".
     message = "Authenticate with DecentraID"
 
     try:
         recovered_address = Web3().eth.account.recover_message(
-            {"message": message, "signature": request.signature}
+            encode_defunct(text=message),
+            signature=request.signature,
         )
     except Exception:
         raise HTTPException(status_code=401, detail="Invalid signature")

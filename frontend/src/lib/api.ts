@@ -53,10 +53,18 @@ class ApiClient {
       headers['Content-Type'] = 'application/json';
     }
 
-    const response = await fetch(`${API_BASE}${path}`, {
-      ...options,
-      headers,
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        headers,
+      });
+    } catch {
+      // Network failure: backend not running, CORS blocked, or wrong API URL.
+      throw new Error(
+        `Cannot reach the API at ${API_BASE}. Is the backend running? Start it with: docker compose up -d backend`
+      );
+    }
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ detail: 'Request failed' }));

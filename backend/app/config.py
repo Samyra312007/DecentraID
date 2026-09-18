@@ -67,8 +67,8 @@ class Settings(BaseSettings):
     # Anomaly Detection
     anomaly_service_url: str = "http://localhost:8001"
 
-    # CORS
-    cors_origins: str = "http://localhost:3000"
+    # CORS (frontend direct on 3000 and via nginx on 80)
+    cors_origins: str = "http://localhost:3000,http://localhost"
 
     # Logging
     log_level: str = "INFO"
