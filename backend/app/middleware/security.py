@@ -30,6 +30,11 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         r"<embed[^>]*>",
     ]
 
+    # FastAPI documentation routes. Swagger UI / ReDoc load their assets from a
+    # CDN (cdn.jsdelivr.net) and are bootstrapped with inline scripts/styles, so
+    # the strict default CSP would leave /docs and /redoc permanently blank.
+    DOCS_PATHS = {"/docs", "/docs/oauth2-redirect", "/redoc", "/openapi.json"}
+
     def __init__(self, app, enable_input_validation: bool = True):
         super().__init__(app)
         self.enable_input_validation = enable_input_validation
@@ -55,17 +60,34 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
-        response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; "
-            "script-src 'self'; "
-            "style-src 'self'; "
-            "img-src 'self' data: https:; "
-            "font-src 'self' data:; "
-            "connect-src 'self' ws: wss:; "
-            "frame-ancestors 'none'; "
-            "base-uri 'self'; "
-            "form-action 'self'"
-        )
+        if request.url.path in self.DOCS_PATHS:
+            # Relaxed policy only for the docs pages: allow the Swagger/ReDoc
+            # CDN assets plus the inline bootstrap scripts and styles FastAPI
+            # ships on those pages. All API routes keep the strict policy.
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+                "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+                "img-src 'self' data: https://cdn.jsdelivr.net; "
+                "font-src 'self' data: https://cdn.jsdelivr.net; "
+                "connect-src 'self' https://cdn.jsdelivr.net; "
+                "worker-src 'self' blob:; "
+                "frame-ancestors 'none'; "
+                "base-uri 'self'; "
+                "form-action 'self'"
+            )
+        else:
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "script-src 'self'; "
+                "style-src 'self'; "
+                "img-src 'self' data: https:; "
+                "font-src 'self' data:; "
+                "connect-src 'self' ws: wss:; "
+                "frame-ancestors 'none'; "
+                "base-uri 'self'; "
+                "form-action 'self'"
+            )
 
         # Remove server header
         if "server" in response.headers:
