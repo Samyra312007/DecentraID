@@ -301,7 +301,7 @@ export default function LandingPage() {
           <div className="col-span-1">
             <h4 className="text-sm font-semibold text-foreground mb-4">Resources</h4>
             <ul className="flex flex-col gap-3">
-              <li><a className="text-sm text-slate-400 hover:text-primary transition-colors" href="#">Documentation</a></li>
+              <li><Link className="text-sm text-slate-400 hover:text-primary transition-colors" href="/docs">Documentation</Link></li>
             </ul>
           </div>
           <div className="col-span-1">

@@ -131,6 +131,7 @@ export default function SettingsPage() {
                   { label: 'Manage DIDs', href: '/did', icon: 'badge' },
                   { label: 'View Assets', href: '/assets', icon: 'token' },
                   { label: 'Anomaly Dashboard', href: '/anomaly', icon: 'monitoring' },
+                  { label: 'Documentation', href: '/docs', icon: 'menu_book' },
                 ].map((link) => (
                   <Link
                     key={link.href}

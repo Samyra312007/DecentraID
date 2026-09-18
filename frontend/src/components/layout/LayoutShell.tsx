@@ -11,7 +11,8 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
     pathname === '/signin' ||
     pathname === '/signup' ||
     pathname === '/privacy' ||
-    pathname === '/terms';
+    pathname === '/terms' ||
+    pathname === '/docs';
 
   if (isChromeless) {
     return <>{children}</>;
