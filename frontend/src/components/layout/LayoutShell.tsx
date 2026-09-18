@@ -6,7 +6,12 @@ import { Header } from './Header';
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isChromeless = pathname === '/' || pathname === '/signin' || pathname === '/signup';
+  const isChromeless =
+    pathname === '/' ||
+    pathname === '/signin' ||
+    pathname === '/signup' ||
+    pathname === '/privacy' ||
+    pathname === '/terms';
 
   if (isChromeless) {
     return <>{children}</>;

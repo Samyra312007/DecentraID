@@ -152,9 +152,9 @@ export default function SignUpPage() {
           />
           <span className="text-xs text-muted-foreground" style={{ fontFamily: 'var(--font-nunito)', lineHeight: 1.5 }}>
             I agree to the{' '}
-            <a href="#" className="text-primary hover:underline underline-offset-2">Terms of Service</a>
+            <Link href="/terms" className="text-primary hover:underline underline-offset-2">Terms of Service</Link>
             {' '}and{' '}
-            <a href="#" className="text-primary hover:underline underline-offset-2">Privacy Policy</a>.
+            <Link href="/privacy" className="text-primary hover:underline underline-offset-2">Privacy Policy</Link>.
           </span>
         </label>
 

@@ -18,7 +18,7 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-8">
             <a className="group relative text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors py-2 px-4 rounded-md hover:bg-muted" href="#products">Products<span aria-hidden className="pointer-events-none absolute left-4 right-4 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100" /></a>
             <a className="group relative text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors py-2 px-4 rounded-md hover:bg-muted" href="#solutions">Solutions<span aria-hidden className="pointer-events-none absolute left-4 right-4 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100" /></a>
-            <a className="group relative text-sm font-semibold text-primary font-bold" href="#security">Security<span aria-hidden className="pointer-events-none absolute left-0 right-0 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100" /></a>
+            <a className="group relative text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors py-2 px-4 rounded-md hover:bg-muted" href="#security">Security<span aria-hidden className="pointer-events-none absolute left-4 right-4 bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-200 group-hover:scale-x-100" /></a>
           </div>
           <div className="hidden md:flex items-center gap-4">
             <Link href="/signin" className="text-sm font-semibold text-foreground hover:text-primary transition-colors">Sign In</Link>
@@ -237,8 +237,8 @@ export default function LandingPage() {
           <div className="col-span-1">
             <h4 className="text-sm font-semibold text-foreground mb-4">Legal</h4>
             <ul className="flex flex-col gap-3">
-              <li><a className="text-sm text-slate-400 hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
-              <li><a className="text-sm text-slate-400 hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+              <li><Link className="text-sm text-slate-400 hover:text-primary transition-colors" href="/privacy">Privacy Policy</Link></li>
+              <li><Link className="text-sm text-slate-400 hover:text-primary transition-colors" href="/terms">Terms of Service</Link></li>
             </ul>
           </div>
         </div>
